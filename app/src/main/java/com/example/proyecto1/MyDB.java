@@ -11,10 +11,18 @@ import androidx.annotation.Nullable;
 public class MyDB extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "RecetasDB";
     private static final int DATABASE_VERSION = 1;
+    private static MyDB instance;
     private SQLiteDatabase database;
 
-    public MyDB(@Nullable Context context, @Nullable SQLiteDatabase.CursorFactory factory) {
-        super(context, DATABASE_NAME, factory, DATABASE_VERSION);
+    private MyDB(@Nullable Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    public static synchronized MyDB getInstance(Context context) {
+        if (instance == null) {
+            instance = new MyDB(context.getApplicationContext());
+        }
+        return instance;
     }
 
     @Override

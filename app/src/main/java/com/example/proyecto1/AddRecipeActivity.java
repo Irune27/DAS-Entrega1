@@ -15,7 +15,7 @@ public class AddRecipeActivity extends BaseRecipeActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
 
-        databaseHelper = new MyDB(this, null);
+        databaseHelper = MyDB.getInstance(this);
 
         nameInput = findViewById(R.id.editTextName);
         ingredientsInput = findViewById(R.id.editTextIngredients);

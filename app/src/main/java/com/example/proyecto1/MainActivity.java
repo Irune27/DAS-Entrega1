@@ -43,7 +43,7 @@ RecyclerViewFragment.recipeListener {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        dbHelper = new MyDB(this, null);
+        dbHelper = MyDB.getInstance(this);
 
         list = findViewById(R.id.recyclerView);
         if (list == null) {

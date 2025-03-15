@@ -40,7 +40,7 @@ public class RecyclerViewFragment extends Fragment {
         list = view.findViewById(R.id.recyclerViewFragment);
         recipeNames = new ArrayList<>();
         images = new ArrayList<>();
-        dbHelper = new MyDB(requireContext(), null);
+        dbHelper = MyDB.getInstance(requireContext());
 
         adapter = new MyAdapter(recipeNames, images, pos -> {
             if (listener != null) {

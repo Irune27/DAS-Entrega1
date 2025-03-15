@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color name="myBackground">#1E1E1E</color>
+    <color name="myPrimary">#1E3A4A</color>
+    <color name="mySecondary">#4A5A6A</color>
+    <color name="myTextColor">#FFFFFF</color>
+    <color name="myError">#7A0015</color>
+    <color name="myLandBackground">#757575</color>
+    <color name="darkCardBackground" tools:ignore="MissingDefaultResource">#2F3036</color>
+</resources>

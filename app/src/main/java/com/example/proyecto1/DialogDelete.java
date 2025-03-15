@@ -25,7 +25,7 @@ public class DialogDelete extends DialogFragment {
         builder.setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MyDB db = new MyDB(requireContext(), null);
+                MyDB db = MyDB.getInstance(requireContext());
                 int deletedRows = db.deleteRecipe(recipeId);
 
                 if (deletedRows > 0) {

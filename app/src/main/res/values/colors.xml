@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="myBackground">#FFFFFF</color>
+    <color name="myPrimary">#5F9EA0</color>
+    <color name="mySecondary">#708090</color>
+    <color name="myTextColor">#000000</color>
+    <color name="myError">#B00020</color>
+    <color name="myLandBackground">#E2E2E9</color>
 </resources>
