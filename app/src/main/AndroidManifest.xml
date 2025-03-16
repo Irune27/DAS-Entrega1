@@ -36,6 +36,7 @@
         <activity android:name=".BaseRecipeActivity" android:screenOrientation="portrait"/>
         <activity android:name=".EditRecipeActivity" android:screenOrientation="portrait"/>
         <activity android:name=".ShowRecipeActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".SettingsActivity" android:screenOrientation="portrait"/>
 
         <receiver android:name=".NotificationReceiver" android:exported="false" />
     </application>

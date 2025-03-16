@@ -1,5 +1,46 @@
 <resources>
-    <string name="app_name">Proyecto1</string>
-    <string name="edit_button_description">Edit</string>
-    <string name="delete_button_description">Delete</string>
+    <string name="app_name">Recipe Manager</string>
+    <string name="edit_button_description">Editar</string>
+    <string name="delete_button_description">Eliminar</string>
+
+    <string name="back">Volver</string>
+    <string name="recipes">Recetas</string>
+    <string name="recipe_name">Nombre de la Receta</string>
+    <string name="ingredients">Ingredientes</string>
+    <string name="steps">Pasos</string>
+    <string name="select_image">Seleccionar Imagen</string>
+    <string name="take_photo">Sacar Foto</string>
+    <string name="save_recipe">Guardar Receta</string>
+    <string name="settings">Ajustes</string>
+    <string name="confirm_theme">Confirmar Tema</string>
+    <string name="system_mode">Modo del sistema</string>
+    <string name="light">Claro</string>
+    <string name="dark">Oscuro</string>
+    <string name="language">Idioma</string>
+    <string name="confirm_language">Confirmar Idioma</string>
+    <string name="spanish">Español</string>
+    <string name="english">Inglés</string>
+    <string name="basque">Euskera</string>
+
+    <string name="fill_all_fields">Es necesario rellenar todos los campos</string>
+    <string name="recipe_add_ok">¡La receta se ha añadido correctamente!</string>
+    <string name="recipe_add_error">Error al añadir la receta</string>
+    <string name="external_storage">Almacenamiento externo no disponible</string>
+    <string name="camera_title">¿Permitir acceso a la cámara?</string>
+    <string name="camera_gallery_message">Sin permiso para acceder a la galería de fotos o a la cámara,
+        la aplicación asignará una imagen predeterminada a las recetas.</string>
+    <string name="camera_positive">Dar acceso a la cámara</string>
+    <string name="camera_gallery_neutral">Continuar</string>
+    <string name="camera_info_title">Acceso a la cámara no permitido</string>
+    <string name="camera_gallery_info_positive">Aceptar</string>
+    <string name="delete_title">¿Seguro que quieres borrar esta receta?</string>
+    <string name="delete_positive">Borrar</string>
+    <string name="delete_negative">Cancelar</string>
+    <string name="gallery_title">¿Permitir acceso a la galería?</string>
+    <string name="gallery_positive">Dar acceso a la galería</string>
+    <string name="gallery_info_title">Acceso a galería no permitido</string>
+    <string name="recipe_update_ok">¡Receta actualizada correctamente!</string>
+    <string name="recipe_update_error">Error al actualizar la receta</string>
+    <string name="notification_message">¡Chef! ¿Ya has pensado qué vas a comer mañana?</string>
+    <string name="notification_subtext">Recordatorio</string>
 </resources>

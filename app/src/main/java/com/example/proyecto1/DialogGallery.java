@@ -18,10 +18,9 @@ public class DialogGallery extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("¿Permitir acceso a la galería?");
-        builder.setMessage("Sin permiso para acceder a la galería de fotos o sacar fotos, " +
-                "la aplicación asignará una imagen predeterminada a las recetas.");
-        builder.setPositiveButton("Dar acceso a la galería", new DialogInterface.OnClickListener() {
+        builder.setTitle(getContext().getString(R.string.gallery_title));
+        builder.setMessage(getContext().getString(R.string.camera_gallery_message));
+        builder.setPositiveButton(getContext().getString(R.string.gallery_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -31,7 +30,7 @@ public class DialogGallery extends DialogFragment {
                 startActivity(intent);
             }
         });
-        builder.setNeutralButton("Continuar", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(getContext().getString(R.string.camera_gallery_neutral), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

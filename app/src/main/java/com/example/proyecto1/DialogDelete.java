@@ -21,8 +21,8 @@ public class DialogDelete extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
-        builder.setTitle("¿Seguro que quieres borrar esta receta?");
-        builder.setPositiveButton("Borrar", new DialogInterface.OnClickListener() {
+        builder.setTitle(getContext().getString(R.string.delete_title));
+        builder.setPositiveButton(getContext().getString(R.string.delete_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 MyDB db = MyDB.getInstance(requireContext());
@@ -35,7 +35,7 @@ public class DialogDelete extends DialogFragment {
                 }
             }
         });
-        builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getContext().getString(R.string.delete_negative), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

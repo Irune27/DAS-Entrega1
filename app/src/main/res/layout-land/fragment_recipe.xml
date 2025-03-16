@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
-                android:text="Ingredientes"
+                android:text="@string/ingredients"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipe_name" />
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:text="Pasos"
+                android:text="@string/steps"
                 android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@+id/recipe_name"
                 app:layout_constraintTop_toTopOf="parent" />

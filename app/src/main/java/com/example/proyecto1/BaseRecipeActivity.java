@@ -83,7 +83,7 @@ public class BaseRecipeActivity extends AppCompatActivity {
 
     protected String saveImageToExternalStorage(Bitmap bitmap) {
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            Toast.makeText(this, "External storage not available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getString(R.string.external_storage), Toast.LENGTH_SHORT).show();
             return "";
         }
         try {

@@ -46,17 +46,17 @@ public class AddRecipeActivity extends BaseRecipeActivity {
         String steps = stepsInput.getText().toString().trim();
 
         if (name.isEmpty() || ingredients.isEmpty() || steps.isEmpty()) {
-            Toast.makeText(this, "Es necesario rellenar todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show();
             return;
         }
 
         long result = databaseHelper.addRecipe(name, imagePath, ingredients, steps);
 
         if (result != -1) {
-            Toast.makeText(this, "¡La receta se ha añadido correctamente!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getString(R.string.recipe_add_ok), Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(this, "Error al añadir la receta", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getString(R.string.recipe_add_error), Toast.LENGTH_SHORT).show();
         }
     }
 }

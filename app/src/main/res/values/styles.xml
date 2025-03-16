@@ -71,4 +71,11 @@
         <item name="android:textColor">@color/mySecondary</item>
     </style>
 
+    <style name="SettingsText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/myTextColor</item>
+    </style>
+
 </resources>

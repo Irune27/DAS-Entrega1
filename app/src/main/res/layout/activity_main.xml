@@ -40,10 +40,22 @@
             style="@style/TitleText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Recetas"
-            android:paddingStart="40dp"
+            android:layout_weight="0.5"
+            android:text="@string/recipes"
+            android:paddingStart="20dp"
             android:layout_marginTop="15dp"/>
+
+        <Button
+            android:id="@+id/settings"
+            style="@style/ButtonStyle"
+            android:layout_width="35dp"
+            android:layout_height="60dp"
+            android:layout_weight="0.1"
+            app:icon="@drawable/cog"
+            app:iconPadding="0dp"
+            app:iconSize="22dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp" />
 
         <Button
             android:id="@+id/button"

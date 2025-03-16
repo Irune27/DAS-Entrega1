@@ -22,7 +22,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="35dp"
-            android:text="Volver"
+            android:text="@string/back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="25dp"
-        android:text="Ingredientes"
+        android:text="@string/ingredients"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipe_image" />
 
@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="21dp"
-        android:text="Pasos"
+        android:text="@string/steps"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/scroll_ingredients" />
 

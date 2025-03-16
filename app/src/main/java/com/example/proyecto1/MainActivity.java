@@ -7,6 +7,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -18,8 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements RecipeFragment.recipeListener,
 RecyclerViewFragment.recipeListener {
@@ -40,7 +42,13 @@ RecyclerViewFragment.recipeListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        EdgeToEdge.enable(this);
+        SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
+        int themeMode = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        AppCompatDelegate.setDefaultNightMode(themeMode);
+
+        String language = prefs.getString("language", "es");
+        setLocale(language);
+
         setContentView(R.layout.activity_main);
 
         dbHelper = MyDB.getInstance(this);
@@ -67,6 +75,15 @@ RecyclerViewFragment.recipeListener {
             addButton.setOnClickListener(v -> {
                 Intent intent = new Intent(MainActivity.this, AddRecipeActivity.class);
                 startActivity(intent);
+            });
+        }
+
+        Button settingsButton = findViewById(R.id.settings);
+        if (settingsButton != null) {
+            settingsButton.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                finish();
             });
         }
 
@@ -183,6 +200,14 @@ RecyclerViewFragment.recipeListener {
                 calendar.getTimeInMillis(),
                 AlarmManager.INTERVAL_DAY,
                 pendingIntent);
+    }
+
+    private void setLocale(String languageCode) {
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     @Override

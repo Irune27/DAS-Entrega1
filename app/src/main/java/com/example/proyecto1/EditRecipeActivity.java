@@ -58,7 +58,7 @@ public class EditRecipeActivity extends BaseRecipeActivity {
         String steps = stepsInput.getText().toString().trim();
 
         if (name.isEmpty() || ingredients.isEmpty() || steps.isEmpty()) {
-            Toast.makeText(this, "Es necesario rellenar todos los campos", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -71,10 +71,10 @@ public class EditRecipeActivity extends BaseRecipeActivity {
             intent.putExtra("updated_ingredients", ingredients);
             intent.putExtra("updated_steps", steps);
             setResult(RESULT_OK, intent);
-            Toast.makeText(this, "¡Receta actualizada correctamente!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getString(R.string.recipe_update_ok), Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            Toast.makeText(this, "Error al actualizar la receta", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, this.getString(R.string.recipe_update_error), Toast.LENGTH_SHORT).show();
         }
     }
 }

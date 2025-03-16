@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Recipe Manager</string>
+    <string name="edit_button_description">Aldatu</string>
+    <string name="delete_button_description">Ezabatu</string>
+
+    <string name="back">Itzuli</string>
+    <string name="recipes">Errezetak</string>
+    <string name="recipe_name">Errezetaren Izena</string>
+    <string name="ingredients">Osagaiak</string>
+    <string name="steps">Urratsak</string>
+    <string name="select_image">Irudia Hautatu</string>
+    <string name="take_photo">Argazkia Atera</string>
+    <string name="save_recipe">Errezeta Gorde</string>
+    <string name="settings">Ezarpenak</string>
+    <string name="confirm_theme">Gaia Baieztatu</string>
+    <string name="system_mode">Sistemaren Modua</string>
+    <string name="light">Argia</string>
+    <string name="dark">Iluna</string>
+    <string name="language">Hizkuntza</string>
+    <string name="confirm_language">Hizkuntza Baieztatu</string>
+    <string name="spanish">Espainiera</string>
+    <string name="english">Ingelesa</string>
+    <string name="basque">Euskara</string>
+
+    <string name="fill_all_fields">Eremu guztiak betetzea beharrezkoa da</string>
+    <string name="recipe_add_ok">Errezeta modu egokian gorde da!</string>
+    <string name="recipe_add_error">Errorea errezeta gordetzean</string>
+    <string name="external_storage">Kanpoko biltegiratzea ez dago eskuragarri</string>
+    <string name="camera_title">Kamerara sartzen utzi?</string>
+    <string name="camera_gallery_message">Argazki-galeriara edo kamerara sartzeko baimenik gabe,
+aplikazioak irudi lehenetsia esleituko die errezetei.</string>
+    <string name="camera_positive">Eman kamerara sartzeko baimena</string>
+    <string name="camera_gallery_neutral">Jarraitu</string>
+    <string name="camera_info_title">Kamerarako sarbidea ez dago baimenduta</string>
+    <string name="camera_gallery_info_positive">Onartu</string>
+    <string name="delete_title">Ziur zaude errezeta hau ezabatu nahi duzula?</string>
+    <string name="delete_positive">Ezabatu</string>
+    <string name="delete_negative">Ezeztatu</string>
+    <string name="gallery_title">Argazki-galeriara sartzen utzi?</string>
+    <string name="gallery_positive">Eman argazki-galeriara sartzeko baimena</string>
+    <string name="gallery_info_title">Argazki-galeriarako sarbidea ez dago baimenduta</string>
+    <string name="recipe_update_ok">Errezeta modu egokian eguneratu da!</string>
+    <string name="recipe_update_error">Errorea errezeta eguneratzean</string>
+    <string name="notification_message">Chef! Pentsatu duzu zer jango duzun bihar?</string>
+    <string name="notification_subtext">Gogorarazpena</string>
+</resources>

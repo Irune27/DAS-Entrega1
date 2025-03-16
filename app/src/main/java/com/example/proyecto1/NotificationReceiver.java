@@ -17,9 +17,9 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id");
         builder.setSmallIcon(R.drawable.chef_hat)
-                .setContentTitle("Recipe Manager")
-                .setContentText("¡Chef! ¿Ya has pensado qué vas a comer mañana?")
-                .setSubText("Recordatorio")
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(context.getString(R.string.notification_message))
+                .setSubText(context.getString(R.string.notification_subtext))
                 .setVibrate(new long[]{0, 1000, 500, 1000})
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
