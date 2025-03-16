@@ -19,6 +19,7 @@ public class MyDB extends SQLiteOpenHelper {
     }
 
     public static synchronized MyDB getInstance(Context context) {
+        // Singleton
         if (instance == null) {
             instance = new MyDB(context.getApplicationContext());
         }

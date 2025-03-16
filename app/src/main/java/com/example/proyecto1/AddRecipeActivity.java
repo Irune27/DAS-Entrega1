@@ -45,6 +45,7 @@ public class AddRecipeActivity extends BaseRecipeActivity {
         String ingredients = ingredientsInput.getText().toString().trim();
         String steps = stepsInput.getText().toString().trim();
 
+        // es necesario rellenar los campos del nombre, los ingredientes y los pasos
         if (name.isEmpty() || ingredients.isEmpty() || steps.isEmpty()) {
             Toast.makeText(this, this.getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show();
             return;
@@ -52,6 +53,7 @@ public class AddRecipeActivity extends BaseRecipeActivity {
 
         long result = databaseHelper.addRecipe(name, imagePath, ingredients, steps);
 
+        // si la receta se ha añadido correctamente, destruir la actividad (volver a MainActivity)
         if (result != -1) {
             Toast.makeText(this, this.getString(R.string.recipe_add_ok), Toast.LENGTH_SHORT).show();
             finish();

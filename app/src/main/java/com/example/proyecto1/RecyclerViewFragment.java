@@ -52,6 +52,7 @@ public class RecyclerViewFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false);
         list.setLayoutManager(layoutManager);
 
+        // actualizar las recetas que se muestran con la lista de recetas de la base de datos
         loadRecipes();
 
         return view;
@@ -77,6 +78,8 @@ public class RecyclerViewFragment extends Fragment {
         recipeNames.clear();
         images.clear();
 
+        // recuperar todas las recetas de la base de datos, y mostrar el nombre y la imagen para
+        // cada una
         Cursor cursor = dbHelper.getAllRecipes();
         if (cursor.moveToFirst()) {
             do {

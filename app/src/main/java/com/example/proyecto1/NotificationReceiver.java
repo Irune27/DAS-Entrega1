@@ -20,6 +20,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        // recordar al usuario que entre a la app
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id");
         builder.setSmallIcon(R.drawable.chef_hat)
                 .setContentTitle(context.getString(R.string.app_name))
@@ -36,6 +37,7 @@ public class NotificationReceiver extends BroadcastReceiver {
     }
 
     private void applySavedLocale(Context context) {
+        // asegurar que se tienen en cuenta las preferencias de idioma establecidas
         SharedPreferences prefs = context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         String languageCode = prefs.getString("language", "es");
 

@@ -42,6 +42,7 @@ RecyclerViewFragment.recipeListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // ajustar el idioma y el tema según las preferencias
         SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
         int themeMode = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(themeMode);
@@ -54,6 +55,8 @@ RecyclerViewFragment.recipeListener {
         dbHelper = MyDB.getInstance(this);
 
         list = findViewById(R.id.recyclerView);
+        // si el dispositivo está en modo horizontal, ocultar las etiquetas de "Ingredientes" y
+        // "Pasos", porque todavía no hay ninguna receta seleccionada
         if (list == null) {
             list = findViewById(R.id.recyclerViewFragment);
             TextView ingredientsTextView = findViewById(R.id.textViewIngredients);
@@ -81,20 +84,25 @@ RecyclerViewFragment.recipeListener {
         Button settingsButton = findViewById(R.id.settings);
         if (settingsButton != null) {
             settingsButton.setOnClickListener(v -> {
+                // lanzar la actividad de ajustes y destruir MainActivity, para recrearla luego
+                // y que se actualice correctamente
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 finish();
             });
         }
 
+        // actualizar las recetas que se muestran con la lista de recetas de la base de datos
         loadRecipes();
 
+        // pedir permiso para notificaciones, si no está concedido ya
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
         != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new
                     String[]{Manifest.permission.POST_NOTIFICATIONS}, 42);
         }
 
+        // establecer la notificación diaria
         createNotificationChannel();
         scheduleDailyNotification();
     }
@@ -102,9 +110,11 @@ RecyclerViewFragment.recipeListener {
     @Override
     protected void onResume() {
         super.onResume();
+        // control de la pila de actividades
         Log Log = null;
         Log.d("BackStack", "Back stack size MainActivity: " +
                 this.getSupportFragmentManager().getBackStackEntryCount());
+        // actualizar las recetas que se muestran con la lista de recetas de la base de datos
         loadRecipes();
     }
 
@@ -112,6 +122,8 @@ RecyclerViewFragment.recipeListener {
         recipeNames.clear();
         images.clear();
 
+        // recuperar todas las recetas de la base de datos, y mostrar el nombre y la imagen para
+        // cada una
         Cursor cursor = dbHelper.getAllRecipes();
         if (cursor.moveToFirst()) {
             do {
@@ -134,6 +146,7 @@ RecyclerViewFragment.recipeListener {
     public void onRecipeSelected(int recipePos) {
         int orientation = getResources().getConfiguration().orientation;
         Cursor cursor = dbHelper.getAllRecipes();
+        // identificar la receta que se ha seleccionado
         cursor.moveToPosition(recipePos);
 
         int code = cursor.getInt(0);
@@ -144,9 +157,11 @@ RecyclerViewFragment.recipeListener {
         cursor.close();
 
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // si el dispositivo está en horizontal
             RecipeFragment recipeFragment = (RecipeFragment) getSupportFragmentManager().
                     findFragmentById(R.id.recipeFragment);
             if (recipeFragment != null) {
+                // poner visibles las etiquetas, porque ahora ya hay una receta que mostrar
                 TextView ingredientsTextView = findViewById(R.id.textViewIngredients);
                 TextView stepsTextView = findViewById(R.id.textViewSteps);
                 ingredientsTextView.setVisibility(View.VISIBLE);
@@ -155,6 +170,7 @@ RecyclerViewFragment.recipeListener {
             }
         }
         else {
+            // si el dispositivo está en vertical
             Intent i = new Intent(this, ShowRecipeActivity.class);
             i.putExtra("code", code);
             i.putExtra("recipe_name", recipeName);
@@ -185,12 +201,14 @@ RecyclerViewFragment.recipeListener {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        // mandar una notificación cada día a las 19:00
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 19);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
+        // dejar un margen de 3 minutos para mandarla
         if (calendar.getTimeInMillis() < System.currentTimeMillis() - 3 * 60 * 1000) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
@@ -203,6 +221,7 @@ RecyclerViewFragment.recipeListener {
     }
 
     private void setLocale(String languageCode) {
+        // establecer idioma
         Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
         Configuration config = new Configuration();

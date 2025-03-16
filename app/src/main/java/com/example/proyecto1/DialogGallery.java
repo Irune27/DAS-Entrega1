@@ -18,11 +18,13 @@ public class DialogGallery extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // alertar que sin permisos para galería o cámara se asignará una imagen predeterminada
         builder.setTitle(getContext().getString(R.string.gallery_title));
         builder.setMessage(getContext().getString(R.string.camera_gallery_message));
         builder.setPositiveButton(getContext().getString(R.string.gallery_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // llevar al usuario a los ajustes generales del dispositivo para que conceda el permiso
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);

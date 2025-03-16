@@ -32,11 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddRecipeActivity" android:screenOrientation="portrait" />
-        <activity android:name=".BaseRecipeActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".EditRecipeActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".ShowRecipeActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".SettingsActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".AddRecipeActivity" />
+        <activity android:name=".BaseRecipeActivity" />
+        <activity android:name=".EditRecipeActivity" />
+        <activity android:name=".ShowRecipeActivity" />
+        <activity android:name=".SettingsActivity" />
 
         <receiver android:name=".NotificationReceiver" android:exported="false" />
     </application>

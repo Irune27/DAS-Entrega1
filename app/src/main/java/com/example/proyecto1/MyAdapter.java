@@ -28,6 +28,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         names = newNames;
         images = newImages;
         this.listener = listener;
+        // avisar de que hay que actualizar la vista
         notifyDataSetChanged();
     }
 
@@ -43,6 +44,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.text.setText(names.get(position));
         String imagePath = images.get(position);
+
+        // ajustar la manera de mostrar la imagen teniendo en cuenta si es la imagen
+        // predeterminada o una imagen añadida por el usuario y guardada en el
+        // almacenamiento externo
         if (imagePath.matches("\\d+")) {
             holder.image.setImageResource(Integer.parseInt(imagePath));
         }

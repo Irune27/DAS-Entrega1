@@ -21,13 +21,16 @@ public class DialogDelete extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         super.onCreateDialog(savedInstanceState);
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
+        // confirmar que realmente se quiere eliminar la receta
         builder.setTitle(getContext().getString(R.string.delete_title));
         builder.setPositiveButton(getContext().getString(R.string.delete_positive), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // eliminar la receta
                 MyDB db = MyDB.getInstance(requireContext());
                 int deletedRows = db.deleteRecipe(recipeId);
 
+                // si se ha eliminado correctamente, volver a MainActivity
                 if (deletedRows > 0) {
                     Intent intent = new Intent(requireActivity(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

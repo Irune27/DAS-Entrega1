@@ -36,6 +36,9 @@ public class EditRecipeActivity extends BaseRecipeActivity {
             stepsInput.setText(intent.getStringExtra("steps"));
             imagePath = intent.getStringExtra("image");
 
+            // ajustar la manera de mostrar la imagen teniendo en cuenta si es la imagen
+            // predeterminada o una imagen añadida por el usuario y guardada en el
+            // almacenamiento externo
             if (imagePath.matches("\\d+")) {
                 recipeImage.setImageResource(Integer.parseInt(imagePath));
             }
@@ -57,11 +60,14 @@ public class EditRecipeActivity extends BaseRecipeActivity {
         String ingredients = ingredientsInput.getText().toString().trim();
         String steps = stepsInput.getText().toString().trim();
 
+        // es necesario rellenar los campos del nombre, los ingredientes y los pasos
         if (name.isEmpty() || ingredients.isEmpty() || steps.isEmpty()) {
             Toast.makeText(this, this.getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show();
             return;
         }
 
+        // si la receta se ha actualizado correctamente, destruir la actividad, volver a RecipeFragment
+        // y pasarle los nuevos datos para que actualice la vista
         long updated = databaseHelper.updateRecipe(recipeId, name, imagePath, ingredients, steps);
         if (updated > 0) {
             Intent intent = new Intent();

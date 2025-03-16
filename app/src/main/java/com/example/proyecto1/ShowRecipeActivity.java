@@ -20,6 +20,7 @@ public class ShowRecipeActivity extends AppCompatActivity implements RecipeFragm
         RecipeFragment fragment = (RecipeFragment) getSupportFragmentManager().
                 findFragmentById(R.id.recipeFragment);
         if (fragment != null) {
+            // actualizar la vista con los detalles de la receta
             fragment.updateRecipe(code, recipeName, recipeImage, recipeIngredients, recipeSteps);
         }
     }

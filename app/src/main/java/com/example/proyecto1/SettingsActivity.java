@@ -18,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // ajustar el idioma y el tema según las preferencias
         SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
 
         int themeMode = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
@@ -33,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         RadioButton radioDark = findViewById(R.id.radioDark);
         Button confirmThemeButton = findViewById(R.id.buttonConfirmTheme);
 
+        // marcar el radio button correspondiente a la configuración actual
         switch (themeMode) {
             case AppCompatDelegate.MODE_NIGHT_NO:
                 radioLight.setChecked(true);
@@ -55,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
                 newThemeMode = AppCompatDelegate.MODE_NIGHT_YES;
             }
 
+            // cuando se pulse el botón de guardar, actualizar las preferencias del tema
             SharedPreferences.Editor editor = prefs.edit();
             editor.putInt("theme_mode", newThemeMode);
             editor.apply();
@@ -67,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
         RadioButton radioBasque = findViewById(R.id.radioBasque);
         Button confirmButton = findViewById(R.id.buttonConfirmLanguage);
 
+        // marcar el radio button correspondiente a la configuración actual
         switch (language) {
             case "en":
                 radioEnglish.setChecked(true);
@@ -87,6 +91,8 @@ public class SettingsActivity extends AppCompatActivity {
             } else if (selectedId == R.id.radioBasque) {
                 newLanguage = "eu";
             }
+
+            // cuando se pulse el botón de guardar, actualizar las preferencias del idioma
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("language", newLanguage);
             editor.apply();
@@ -98,6 +104,7 @@ public class SettingsActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // destruir la actividad y lanzar MainActivity
                 Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -106,6 +113,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setLocale(String languageCode) {
+        // establecer idioma
         Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
         Configuration config = new Configuration();

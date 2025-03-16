@@ -53,6 +53,7 @@ public class RecipeFragment extends Fragment {
             backButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // sacar el fragment de la pila y destruir ShowRecipeActivity
                     requireActivity().getSupportFragmentManager().popBackStack();
                     getActivity().finish();
                 }
@@ -80,6 +81,7 @@ public class RecipeFragment extends Fragment {
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // diálogo para asegurar que se quiere eliminar la receta
                     DialogDelete dialogoDelete = new DialogDelete(recipeId);
                     dialogoDelete.show(getParentFragmentManager(), "etiqueta5");
                 }
@@ -100,6 +102,7 @@ public class RecipeFragment extends Fragment {
                     if (id != -1) {
                         recipeId = id;
                     }
+                    // actualizar la vista con los nuevos datos
                     updateRecipe(recipeId, updatedName, updatedImage, updatedIngredients, updatedSteps);
                 }
             });
@@ -127,11 +130,15 @@ public class RecipeFragment extends Fragment {
         if (recipeTextView != null && ingredients != null && steps != null) {
             recipeTextView.setText(recipeName);
             if (recipeImageView != null) {
+                // ajustar la manera de mostrar la imagen teniendo en cuenta si es la imagen
+                // predeterminada o una imagen añadida por el usuario y guardada en el
+                // almacenamiento externo
                 if (recipeImage.matches("\\d+")) {
                     recipeImageView.setImageResource(Integer.parseInt(recipeImage));
                 } else {
                     recipeImageView.setImageBitmap(BitmapFactory.decodeFile(recipeImage));
                 }
+                // guardar la ruta en el tag para poder usarla
                 recipeImageView.setTag(recipeImage);
             }
             ingredientsTextView.setText(ingredients);
