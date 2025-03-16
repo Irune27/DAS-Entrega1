@@ -5,12 +5,17 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 
 import androidx.core.app.NotificationCompat;
+
+import java.util.Locale;
 
 public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
+        applySavedLocale(context);
         Intent openAppIntent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
@@ -28,5 +33,16 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (manager != null) {
             manager.notify(1, builder.build());
         }
+    }
+
+    private void applySavedLocale(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        String languageCode = prefs.getString("language", "es");
+
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 }
