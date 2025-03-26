@@ -1,11 +1,14 @@
 package com.example.proyecto1;
 
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
     private ArrayList<String> names;
     private ArrayList<String> images;
     private OnRecipeClickListener listener;
+    private int selectedPosition = RecyclerView.NO_POSITION;
 
     public interface OnRecipeClickListener {
         void onRecipeSelected(int position);
@@ -29,6 +33,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         images = newImages;
         this.listener = listener;
         // avisar de que hay que actualizar la vista
+        notifyDataSetChanged();
+    }
+
+    public void setSelectedPosition(int position) {
+        selectedPosition = position;
         notifyDataSetChanged();
     }
 
@@ -56,7 +65,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         } else {
             holder.image.setImageResource(R.drawable.default_image);
         }
-        holder.itemView.setOnClickListener(v -> listener.onRecipeSelected(position));
+
+        // si el dispositivo está en horizontal, cambiar el color del item de la lista si se ha seleccionado
+        int orientation = holder.itemView.getContext().getResources().getConfiguration().orientation;
+        if (position == selectedPosition && orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            holder.relativeLayout.setBackgroundResource(R.color.myLandBackground);
+        } else {
+            holder.relativeLayout.setBackgroundResource(android.R.color.transparent);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onRecipeSelected(position);
+                setSelectedPosition(position);
+            }
+        });
     }
 
     @Override

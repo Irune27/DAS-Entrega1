@@ -55,6 +55,25 @@ public class EditRecipeActivity extends BaseRecipeActivity {
         backButton.setOnClickListener(v -> finish());
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("imagePath", imagePath);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        imagePath = savedInstanceState.getString("imagePath");
+        if (imagePath != null) {
+            if (imagePath.matches("\\d+")) {
+                recipeImage.setImageResource(Integer.parseInt(imagePath));
+            } else {
+                recipeImage.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+            }
+        }
+    }
+
     private void updateRecipe() {
         String name = nameInput.getText().toString().trim();
         String ingredients = ingredientsInput.getText().toString().trim();

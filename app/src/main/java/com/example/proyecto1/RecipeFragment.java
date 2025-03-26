@@ -4,6 +4,7 @@ import static android.app.Activity.RESULT_OK;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +32,13 @@ public class RecipeFragment extends Fragment {
     private ImageView recipeImageView;
     private TextView recipeTextView;
     private TextView ingredientsTextView;
+    private TextView contentTextView;
     private TextView stepsTextView;
+    private TextView labelTextView;
+    private String recipeName;
+    private String recipeIngredients;
+    private String recipeSteps;
+    private String recipeImagePath;
     private int recipeId;
 
     private recipeListener listener;
@@ -43,38 +51,65 @@ public class RecipeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
-        recipeTextView = view.findViewById(R.id.recipe_name);
-        recipeImageView = view.findViewById(R.id.recipe_image);
-        ingredientsTextView = view.findViewById(R.id.recipe_ingredients);
-        stepsTextView = view.findViewById(R.id.recipe_steps);
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            recipeTextView = view.findViewById(R.id.recipe_name);
+            recipeImageView = view.findViewById(R.id.recipe_image);
+            ingredientsTextView = view.findViewById(R.id.recipe_ingredients);
+            stepsTextView = view.findViewById(R.id.recipe_steps);
 
-        Button backButton = view.findViewById(R.id.back2ListButton);
-        if (backButton != null) {
-            backButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // sacar el fragment de la pila y destruir ShowRecipeActivity
-                    requireActivity().getSupportFragmentManager().popBackStack();
-                    getActivity().finish();
-                }
+            recipeTextView.setMovementMethod(new ScrollingMovementMethod());
+
+            Button backButton = view.findViewById(R.id.back2ListButton);
+            if (backButton != null) {
+                backButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // sacar el fragment de la pila y destruir ShowRecipeActivity
+                        requireActivity().getSupportFragmentManager().popBackStack();
+                        getActivity().finish();
+                    }
+                });
+            }
+        }
+        else {
+            contentTextView = view.findViewById(R.id.recipe_content);
+            labelTextView = view.findViewById(R.id.textViewContent);
+            Button ingredientsButton = view.findViewById(R.id.ingredientsButton);
+            ingredientsButton.setOnClickListener(v -> {
+                contentTextView.setText(recipeIngredients);
+                labelTextView.setText(R.string.ingredients);
+            });
+
+            Button stepsButton = view.findViewById(R.id.stepsButton);
+            stepsButton.setOnClickListener(v -> {
+                contentTextView.setText(recipeSteps);
+                labelTextView.setText(R.string.steps);
             });
         }
 
         Button editButton = view.findViewById(R.id.editButton);
-        if (editButton != null) {
-            editButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), EditRecipeActivity.class);
-                    intent.putExtra("recipe_id", recipeId);
-                    intent.putExtra("name", recipeTextView.getText());
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), EditRecipeActivity.class);
+                intent.putExtra("recipe_id", recipeId);
+                if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    // recipeTextView.getText() es un SpannableString, y devolvería null --> toString()
+                    intent.putExtra("name", recipeTextView.getText().toString());
                     intent.putExtra("ingredients", ingredientsTextView.getText());
                     intent.putExtra("steps", stepsTextView.getText());
-                    intent.putExtra("image", (String) recipeImageView.getTag());
-                    editRecipeLauncher.launch(intent);
+                    intent.putExtra("image", (String) recipeTextView.getTag());
                 }
-            });
-        }
+                else {
+                    intent.putExtra("name", recipeName);
+                    intent.putExtra("ingredients", recipeIngredients);
+                    intent.putExtra("steps", recipeSteps);
+                    intent.putExtra("image", recipeImagePath);
+                }
+                editRecipeLauncher.launch(intent);
+            }
+        });
 
         Button deleteButton = view.findViewById(R.id.deleteButton);
         if (deleteButton != null) {
@@ -87,7 +122,8 @@ public class RecipeFragment extends Fragment {
                 }
             });
         }
-            return view;
+
+        return view;
     }
 
     private final ActivityResultLauncher<Intent> editRecipeLauncher =
@@ -126,23 +162,34 @@ public class RecipeFragment extends Fragment {
     public void updateRecipe(int code, String recipeName, String recipeImage, String ingredients,
                              String steps) {
         this.recipeId = code;
+        this.recipeName = recipeName;
+        this.recipeIngredients = ingredients;
+        this.recipeSteps = steps;
+        this.recipeImagePath = recipeImage;
 
-        if (recipeTextView != null && ingredients != null && steps != null) {
-            recipeTextView.setText(recipeName);
-            if (recipeImageView != null) {
-                // ajustar la manera de mostrar la imagen teniendo en cuenta si es la imagen
-                // predeterminada o una imagen añadida por el usuario y guardada en el
-                // almacenamiento externo
-                if (recipeImage.matches("\\d+")) {
-                    recipeImageView.setImageResource(Integer.parseInt(recipeImage));
-                } else {
-                    recipeImageView.setImageBitmap(BitmapFactory.decodeFile(recipeImage));
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (recipeName != null && ingredients != null && steps != null) {
+                recipeTextView.setText(recipeName);
+                if (recipeImageView != null) {
+                    // ajustar la manera de mostrar la imagen teniendo en cuenta si es la imagen
+                    // predeterminada o una imagen añadida por el usuario y guardada en el
+                    // almacenamiento externo
+                    if (recipeImage.matches("\\d+")) {
+                        recipeImageView.setImageResource(Integer.parseInt(recipeImage));
+                    } else {
+                        recipeImageView.setImageBitmap(BitmapFactory.decodeFile(recipeImage));
+                    }
                 }
-                // guardar la ruta en el tag para poder usarla
-                recipeImageView.setTag(recipeImage);
+                // guardar la ruta en el tag del título para poder usarla
+                recipeTextView.setTag(recipeImage);
+                ingredientsTextView.setText(ingredients);
+                stepsTextView.setText(steps);
             }
-            ingredientsTextView.setText(ingredients);
-            stepsTextView.setText(steps);
+        }
+        else {
+            contentTextView.setText(recipeIngredients);
+            labelTextView.setText(R.string.ingredients);
         }
     }
 }

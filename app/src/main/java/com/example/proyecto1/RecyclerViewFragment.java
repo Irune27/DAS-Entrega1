@@ -74,17 +74,16 @@ public class RecyclerViewFragment extends Fragment {
         }
     }
 
-    public void loadRecipes() {
+    private void loadRecipes() {
         recipeNames.clear();
         images.clear();
 
-        // recuperar todas las recetas de la base de datos, y mostrar el nombre y la imagen para
-        // cada una
-        Cursor cursor = dbHelper.getAllRecipes();
+        // recuperar el nombre y la imagen de todas las recetas de la base de datos
+        Cursor cursor = dbHelper.getRecipeNamesAndImages();
         if (cursor.moveToFirst()) {
             do {
-                recipeNames.add(cursor.getString(1));
-                String image = cursor.getString(2);
+                recipeNames.add(cursor.getString(0));
+                String image = cursor.getString(1);
                 if (image != null && !image.isEmpty()) {
                     images.add(image);
                 } else {

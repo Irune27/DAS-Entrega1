@@ -1,5 +1,6 @@
 package com.example.proyecto1;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,25 @@ public class AddRecipeActivity extends BaseRecipeActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("imagePath", imagePath);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        imagePath = savedInstanceState.getString("imagePath");
+        if (imagePath != null) {
+            if (imagePath.matches("\\d+")) {
+                recipeImage.setImageResource(Integer.parseInt(imagePath));
+            } else {
+                recipeImage.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+            }
+        }
     }
 
     private void saveRecipe() {

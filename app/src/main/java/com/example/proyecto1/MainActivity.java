@@ -37,6 +37,7 @@ RecyclerViewFragment.recipeListener {
     private ArrayList<String> recipeNames;
     private ArrayList<String> images;
     private MyDB dbHelper;
+    private int selectedRecipePosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,17 +53,32 @@ RecyclerViewFragment.recipeListener {
 
         setContentView(R.layout.activity_main);
 
+        // si la pantalla está en horizontal
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // comprobar si la actividad se ha lanzado con una receta
+            Intent intent = getIntent();
+            if (intent.hasExtra("code")) {
+                int code = intent.getIntExtra("code", -1);
+                String recipeName = intent.getStringExtra("recipe_name");
+                String recipeImage = intent.getStringExtra("recipe_image");
+                String recipeIngredients = intent.getStringExtra("recipe_ingredients");
+                String recipeSteps = intent.getStringExtra("recipe_steps");
+                selectedRecipePosition = intent.getIntExtra("selected_position", -1);
+
+                // cargar los detalles de la receta
+                RecipeFragment recipeFragment = (RecipeFragment) getSupportFragmentManager()
+                        .findFragmentById(R.id.recipeFragment);
+                if (recipeFragment != null) {
+                    recipeFragment.updateRecipe(code, recipeName, recipeImage, recipeIngredients, recipeSteps);
+                }
+            }
+        }
+
         dbHelper = MyDB.getInstance(this);
 
         list = findViewById(R.id.recyclerView);
-        // si el dispositivo está en modo horizontal, ocultar las etiquetas de "Ingredientes" y
-        // "Pasos", porque todavía no hay ninguna receta seleccionada
         if (list == null) {
             list = findViewById(R.id.recyclerViewFragment);
-            TextView ingredientsTextView = findViewById(R.id.textViewIngredients);
-            TextView stepsTextView = findViewById(R.id.textViewSteps);
-            ingredientsTextView.setVisibility(View.INVISIBLE);
-            stepsTextView.setVisibility(View.INVISIBLE);
         }
 
         recipeNames = new ArrayList<>();
@@ -116,19 +132,49 @@ RecyclerViewFragment.recipeListener {
                 this.getSupportFragmentManager().getBackStackEntryCount());
         // actualizar las recetas que se muestran con la lista de recetas de la base de datos
         loadRecipes();
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            TextView labelTextView = findViewById(R.id.textViewContent);
+            Button ingredientsButton = findViewById(R.id.ingredientsButton);
+            Button stepsButton = findViewById(R.id.stepsButton);
+            Button deleteButton = findViewById(R.id.deleteButton);
+            Button editButton = findViewById(R.id.editButton);
+            labelTextView.setVisibility(View.VISIBLE);
+            ingredientsButton.setVisibility(View.VISIBLE);
+            stepsButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+            if (selectedRecipePosition == -1) {
+                // si no hay una receta seleccionada, mostrar los detalles de la primera
+                if (recipeNames.size() > 0) {
+                    onRecipeSelected(0);
+                    adapter.setSelectedPosition(0);
+                }
+                else {
+                    labelTextView.setVisibility(View.INVISIBLE);
+                    ingredientsButton.setVisibility(View.INVISIBLE);
+                    stepsButton.setVisibility(View.INVISIBLE);
+                    deleteButton.setVisibility(View.INVISIBLE);
+                    editButton.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                // si no, mostrar los detalles de la receta seleccionada
+                onRecipeSelected(selectedRecipePosition);
+            }
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void loadRecipes() {
         recipeNames.clear();
         images.clear();
 
-        // recuperar todas las recetas de la base de datos, y mostrar el nombre y la imagen para
-        // cada una
-        Cursor cursor = dbHelper.getAllRecipes();
+        // recuperar el nombre y la imagen de todas las recetas de la base de datos
+        Cursor cursor = dbHelper.getRecipeNamesAndImages();
         if (cursor.moveToFirst()) {
             do {
-                recipeNames.add(cursor.getString(1));
-                String image = cursor.getString(2);
+                recipeNames.add(cursor.getString(0));
+                String image = cursor.getString(1);
                 if (image != null && !image.isEmpty()) {
                     images.add(image);
                 } else {
@@ -144,6 +190,7 @@ RecyclerViewFragment.recipeListener {
 
     @Override
     public void onRecipeSelected(int recipePos) {
+        selectedRecipePosition = recipePos;
         int orientation = getResources().getConfiguration().orientation;
         Cursor cursor = dbHelper.getAllRecipes();
         // identificar la receta que se ha seleccionado
@@ -161,13 +208,10 @@ RecyclerViewFragment.recipeListener {
             RecipeFragment recipeFragment = (RecipeFragment) getSupportFragmentManager().
                     findFragmentById(R.id.recipeFragment);
             if (recipeFragment != null) {
-                // poner visibles las etiquetas, porque ahora ya hay una receta que mostrar
-                TextView ingredientsTextView = findViewById(R.id.textViewIngredients);
-                TextView stepsTextView = findViewById(R.id.textViewSteps);
-                ingredientsTextView.setVisibility(View.VISIBLE);
-                stepsTextView.setVisibility(View.VISIBLE);
                 recipeFragment.updateRecipe(code, recipeName, image, ingredients, steps);
             }
+            adapter.setSelectedPosition(recipePos);
+            adapter.notifyDataSetChanged();
         }
         else {
             // si el dispositivo está en vertical
@@ -177,6 +221,7 @@ RecyclerViewFragment.recipeListener {
             i.putExtra("recipe_image", image);
             i.putExtra("recipe_ingredients", ingredients);
             i.putExtra("recipe_steps", steps);
+            i.putExtra("selected_position", recipePos);
             startActivity(i);
         }
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.ImageView;
@@ -28,20 +29,46 @@ public class BaseRecipeActivity extends AppCompatActivity {
     protected Uri imageUri = null;
     protected String imagePath = String.valueOf(R.drawable.default_image);
 
+    private void launchGallery() {
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickImageLauncher.launch(pickIntent);
+    }
+
+    private void showPermissionDialog() {
+        DialogFragment dialogoGallery = new DialogGallery();
+        dialogoGallery.show(getSupportFragmentManager(), "etiqueta1");
+    }
+
     protected void openImageChooser() {
-        // si el permiso está concedido
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-            Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            pickImageLauncher.launch(pickIntent);
+        // comprobar la API, porque el permiso es diferente (Android 13+, API 33)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            // si el permiso está concedido
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
+                launchGallery();
+            }
+            // si ya se ha solicitado el permiso anteriormente, pero el usuario lo ha rechazado
+            else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_MEDIA_IMAGES)) {
+                showPermissionDialog();
+            }
+            // solicitar permiso
+            else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
+            }
         }
-        // si ya se ha solicitado el permiso anteriormente, pero el usuario lo ha rechazado
-        else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_MEDIA_IMAGES)) {
-            DialogFragment dialogoGallery = new DialogGallery();
-            dialogoGallery.show(getSupportFragmentManager(), "etiqueta1");
-        }
-        // solicitar permiso
+        // comprobar la API, porque el permiso es diferente (Android 10-12, API 29-32)
         else {
-            ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.READ_MEDIA_IMAGES},1);
+            // si el permiso está concedido
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                launchGallery();
+            }
+            // si ya se ha solicitado el permiso anteriormente, pero el usuario lo ha rechazado
+            else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                showPermissionDialog();
+            }
+            // solicitar permiso
+            else {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+            }
         }
     }
 
