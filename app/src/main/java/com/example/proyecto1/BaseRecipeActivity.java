@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -124,9 +125,7 @@ public class BaseRecipeActivity extends AppCompatActivity {
         }
         try {
             // guardar la imagen (comprimida) en el almacenamiento externo
-            int maxWidth = 800;
-            int maxHeight = 800;
-            bitmap = Bitmap.createScaledBitmap(bitmap, maxWidth, maxHeight, true);
+            bitmap = scaleBitmap(bitmap, 800, 800);
 
             File directory = getExternalFilesDir(null);
             // asignarle un nombre único
@@ -138,9 +137,20 @@ public class BaseRecipeActivity extends AppCompatActivity {
 
             return imageFile.getAbsolutePath();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e("ImageSaveError", "Error saving image", e);
             return "";
         }
+    }
+
+    private Bitmap scaleBitmap(Bitmap bitmap, int maxWidth, int maxHeight) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        float scale = Math.min((float) maxWidth / width, (float) maxHeight / height);
+
+        int newWidth = Math.round(width * scale);
+        int newHeight = Math.round(height * scale);
+
+        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
     }
 
     @Override
