@@ -41,7 +41,6 @@
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/default_user"
             app:shapeAppearanceOverlay="@style/CircularImageView" />
 
         <TextView
@@ -49,8 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:text="User" />
+            android:textColor="@color/black" />
 
     </LinearLayout>
 

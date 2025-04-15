@@ -53,5 +53,10 @@
         <activity android:name=".SettingsActivity" />
 
         <receiver android:name=".NotificationReceiver" android:exported="false" />
+
+        <provider
+            android:authorities="com.example.proyecto1.provider"
+            android:name=".RecipeProvider"
+            android:exported="false" />
     </application>
 </manifest>

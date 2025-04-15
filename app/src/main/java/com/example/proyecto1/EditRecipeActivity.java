@@ -1,7 +1,10 @@
 package com.example.proyecto1;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,15 +12,12 @@ import android.widget.Toast;
 
 public class EditRecipeActivity extends BaseRecipeActivity {
     private EditText nameInput, ingredientsInput, stepsInput;
-    private MyDB databaseHelper;
     private int recipeId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
-
-        databaseHelper = MyDB.getInstance(this);
 
         nameInput = findViewById(R.id.editTextName);
         ingredientsInput = findViewById(R.id.editTextIngredients);
@@ -87,7 +87,15 @@ public class EditRecipeActivity extends BaseRecipeActivity {
 
         // si la receta se ha actualizado correctamente, destruir la actividad, volver a RecipeFragment
         // y pasarle los nuevos datos para que actualice la vista
-        long updated = databaseHelper.updateRecipe(recipeId, name, imagePath, ingredients, steps);
+        ContentValues values = new ContentValues();
+        values.put("Name", name);
+        values.put("Image", imagePath);
+        values.put("Ingredients", ingredients);
+        values.put("Steps", steps);
+
+        Uri uri = ContentUris.withAppendedId(RecipeProvider.CONTENT_URI, recipeId);
+        int updated = getContentResolver().update(uri, values, null, null);
+
         if (updated > 0) {
             Intent intent = new Intent();
             intent.putExtra("recipe_id", recipeId);

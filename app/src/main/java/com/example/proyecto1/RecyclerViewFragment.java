@@ -26,7 +26,6 @@ public class RecyclerViewFragment extends Fragment {
     private MyAdapter adapter;
     private ArrayList<String> recipeNames;
     private ArrayList<String> images;
-    private MyDB dbHelper;
     private recipeListener listener;
 
     public RecyclerViewFragment() {
@@ -40,7 +39,6 @@ public class RecyclerViewFragment extends Fragment {
         list = view.findViewById(R.id.recyclerViewFragment);
         recipeNames = new ArrayList<>();
         images = new ArrayList<>();
-        dbHelper = MyDB.getInstance(requireContext());
 
         adapter = new MyAdapter(recipeNames, images, pos -> {
             if (listener != null) {
@@ -79,7 +77,9 @@ public class RecyclerViewFragment extends Fragment {
         images.clear();
 
         // recuperar el nombre y la imagen de todas las recetas de la base de datos
-        Cursor cursor = dbHelper.getRecipeNamesAndImages();
+        String[] projection = {"Name", "Image"};
+        Cursor cursor = requireContext().getContentResolver().query(RecipeProvider.CONTENT_URI,
+                projection, null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 recipeNames.add(cursor.getString(0));
@@ -100,8 +100,5 @@ public class RecyclerViewFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (dbHelper != null) {
-            dbHelper.closeDatabase();
-        }
     }
 }

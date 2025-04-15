@@ -1,6 +1,8 @@
 package com.example.proyecto1;
 
+import android.content.ContentValues;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,14 +11,11 @@ import android.widget.Toast;
 
 public class AddRecipeActivity extends BaseRecipeActivity {
     private EditText nameInput, ingredientsInput, stepsInput;
-    private MyDB databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_recipe);
-
-        databaseHelper = MyDB.getInstance(this);
 
         nameInput = findViewById(R.id.editTextName);
         ingredientsInput = findViewById(R.id.editTextIngredients);
@@ -71,10 +70,16 @@ public class AddRecipeActivity extends BaseRecipeActivity {
             return;
         }
 
-        long result = databaseHelper.addRecipe(name, imagePath, ingredients, steps);
+        ContentValues values = new ContentValues();
+        values.put("Name", name);
+        values.put("Image", imagePath);
+        values.put("Ingredients", ingredients);
+        values.put("Steps", steps);
+
+        Uri insertUri = getContentResolver().insert(RecipeProvider.CONTENT_URI, values);
 
         // si la receta se ha añadido correctamente, destruir la actividad (volver a MainActivity)
-        if (result != -1) {
+        if (insertUri != null) {
             Toast.makeText(this, this.getString(R.string.recipe_add_ok), Toast.LENGTH_SHORT).show();
             finish();
         } else {

@@ -21,7 +21,6 @@ RecyclerViewFragment.recipeListener {
     private MyAdapter adapter;
     private ArrayList<String> recipeNames;
     private ArrayList<String> images;
-    private MyDB dbHelper;
     private int selectedRecipePosition = -1;
 
     @Override
@@ -50,8 +49,6 @@ RecyclerViewFragment.recipeListener {
                 }
             }
         }
-
-        dbHelper = MyDB.getInstance(this);
 
         list = findViewById(R.id.recyclerView);
         if (list == null) {
@@ -132,7 +129,9 @@ RecyclerViewFragment.recipeListener {
         images.clear();
 
         // recuperar el nombre y la imagen de todas las recetas de la base de datos
-        Cursor cursor = dbHelper.getRecipeNamesAndImages();
+        String[] projection = {"Name", "Image"};
+        Cursor cursor = getContentResolver().query(RecipeProvider.CONTENT_URI, projection,
+                null, null, null);
         if (cursor.moveToFirst()) {
             do {
                 recipeNames.add(cursor.getString(0));
@@ -154,7 +153,8 @@ RecyclerViewFragment.recipeListener {
     public void onRecipeSelected(int recipePos) {
         selectedRecipePosition = recipePos;
         int orientation = getResources().getConfiguration().orientation;
-        Cursor cursor = dbHelper.getAllRecipes();
+        Cursor cursor = getContentResolver().query(RecipeProvider.CONTENT_URI, null,
+                null, null, null);
         // identificar la receta que se ha seleccionado
         cursor.moveToPosition(recipePos);
 
@@ -191,6 +191,5 @@ RecyclerViewFragment.recipeListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dbHelper.closeDatabase();
     }
 }
