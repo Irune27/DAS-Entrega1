@@ -6,22 +6,43 @@
 
     <string name="back">Back</string>
     <string name="recipes">Recipes</string>
-    <string name="recipe_name">Recipe Name</string>
+    <string name="map">Map</string>
+    <string name="recipe_name">Recipe name</string>
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
-    <string name="select_image">Select Image</string>
-    <string name="take_photo">Take Photo</string>
-    <string name="save_recipe">Save Recipe</string>
+    <string name="select_image">Select image</string>
+    <string name="take_photo">Take photo</string>
+    <string name="save_recipe">Save recipe</string>
     <string name="settings">Settings</string>
-    <string name="confirm_theme">Confirm Theme</string>
-    <string name="system_mode">System Mode</string>
+    <string name="confirm_theme">Confirm theme</string>
+    <string name="system_mode">System mode</string>
     <string name="light">Light</string>
     <string name="dark">Dark</string>
     <string name="language">Language</string>
-    <string name="confirm_language">Confirm Language</string>
+    <string name="confirm_language">Confirm language</string>
     <string name="spanish">Spanish</string>
     <string name="english">English</string>
     <string name="basque">Basque</string>
+    <string name="starting_point">Bilbao School of Engineering</string>
+    <string name="unnamed_place">Unnamed</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="cafes">Cafes</string>
+    <string name="supermarkets">Supermarkets</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="no_account">No account yet?</string>
+    <string name="register">Register</string>
+    <string name="log_out">Log out</string>
+    <string name="log_in">Log in</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="create_profile">Create profile</string>
+    <string name="profile">Profile</string>
+    <string name="not_modify">(Can\'t be modified)</string>
+    <string name="change_password">Change password</string>
+    <string name="current_password">Current password</string>
+    <string name="verify">Verify</string>
+    <string name="new_password">New password</string>
+    <string name="save_changes">Save changes</string>
 
     <string name="fill_all_fields">All fields must be filled</string>
     <string name="recipe_add_ok">The recipe has been saved successfully!</string>
@@ -36,7 +57,7 @@
     <string name="camera_gallery_info_positive">Accept</string>
     <string name="delete_title">Are you sure you want to delete this recipe?</string>
     <string name="delete_positive">Delete</string>
-    <string name="delete_negative">Cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="gallery_title">Allow access to the photo gallery?</string>
     <string name="gallery_positive">Give access to the gallery</string>
     <string name="gallery_info_title">Access to the photo gallery not allowed</string>
@@ -45,4 +66,33 @@
     <string name="notification_message">Chef! Have you thought about what you\'re going to eat
         tomorrow?</string>
     <string name="notification_subtext">Reminder</string>
+    <string name="location_not_available">Location not available</string>
+    <string name="online">You are online!</string>
+    <string name="offline">You are offline</string>
+    <string name="map_title">Allow location access?</string>
+    <string name="map_message">Without permission to access the device\'s location, the application
+        won\'t be able to mark the restaurants, cafes and supermarkets on the map.</string>
+    <string name="map_positive">Give location access</string>
+    <string name="map_neutral">Continue without location</string>
+    <string name="offline_not_load">You are offline, can\'t load nearby places</string>
+    <string name="fetch_error">Error fetching nearby places</string>
+    <string name="loading_from_point">Loading nearby places…</string>
+    <string name="location_not_found">Location not found</string>
+    <string name="map_instructions_title">Instructions</string>
+    <string name="map_instructions">By clicking on the corresponding buttons, restaurants, cafes
+        and supermarkets within a radius of 1km from your location will appear or disappear. If
+        you press and hold any other point on the map, the places near that point will
+        appear.</string>
+    <string name="map_instructions_positive">Ok</string>
+    <string name="passwords_not_match">Entered values don\'t match</string>
+    <string name="connection_error">Error when connecting to the server</string>
+    <string name="user_registered">User registered</string>
+    <string name="user_already_exists">The user already exists</string>
+    <string name="error_registering_user">Error when registering user</string>
+    <string name="login_successful">Login successful!</string>
+    <string name="invalid_credentials">Invalid credentials</string>
+    <string name="edit_profile_picture">Edit profile picture</string>
+    <string name="could_not_save_image">Couldn\'t save image</string>
+    <string name="image_updated">Image updated</string>
+    <string name="error_fetching_data">Error when fetching the data</string>
 </resources>

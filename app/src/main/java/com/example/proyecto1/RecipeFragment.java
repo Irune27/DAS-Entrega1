@@ -60,15 +60,23 @@ public class RecipeFragment extends Fragment {
 
             recipeTextView.setMovementMethod(new ScrollingMovementMethod());
 
-            Button backButton = view.findViewById(R.id.back2ListButton);
-            if (backButton != null) {
-                backButton.setOnClickListener(new View.OnClickListener() {
+            Button back2ListButton = view.findViewById(R.id.back2ListButton);
+            if (back2ListButton != null) {
+                back2ListButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // sacar el fragment de la pila y destruir ShowRecipeActivity
                         requireActivity().getSupportFragmentManager().popBackStack();
                         getActivity().finish();
                     }
+                });
+            }
+
+            Button backButton = view.findViewById(R.id.backButton);
+            if (backButton != null) {
+                backButton.setOnClickListener(v -> {
+                    requireActivity().getSupportFragmentManager().popBackStack();
+                    getActivity().finish();
                 });
             }
         }

@@ -105,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // destruir la actividad y lanzar MainActivity
-                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                Intent intent = new Intent(SettingsActivity.this, MenuActivity.class);
                 startActivity(intent);
                 finish();
             }

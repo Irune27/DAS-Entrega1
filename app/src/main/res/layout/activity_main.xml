@@ -17,20 +17,23 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="370dp"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="170dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="25dp"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/headerLayout" />
 
     <LinearLayout
         android:id="@+id/headerLayout"
         style="@style/HeaderStyle"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="175dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent">
@@ -43,19 +46,7 @@
             android:layout_weight="0.5"
             android:text="@string/recipes"
             android:paddingStart="15dp"
-            android:layout_marginTop="15dp"/>
-
-        <Button
-            android:id="@+id/settings"
-            style="@style/ButtonStyle"
-            android:layout_width="35dp"
-            android:layout_height="60dp"
-            android:layout_weight="0.1"
-            app:icon="@drawable/cog"
-            app:iconPadding="0dp"
-            app:iconSize="22dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginTop="35dp"/>
 
         <Button
             android:id="@+id/button"
@@ -63,10 +54,21 @@
             android:textSize="26sp"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="10dp"
             android:text="+" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/backButton"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="35dp"
+        android:text="@string/back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

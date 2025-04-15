@@ -38,7 +38,7 @@ public class DialogDelete extends DialogFragment {
                 }
             }
         });
-        builder.setNegativeButton(getContext().getString(R.string.delete_negative), new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getContext().getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 

@@ -6,22 +6,43 @@
 
     <string name="back">Itzuli</string>
     <string name="recipes">Errezetak</string>
-    <string name="recipe_name">Errezetaren Izena</string>
+    <string name="map">Mapa</string>
+    <string name="recipe_name">Errezetaren izena</string>
     <string name="ingredients">Osagaiak</string>
     <string name="steps">Urratsak</string>
-    <string name="select_image">Irudia Hautatu</string>
-    <string name="take_photo">Argazkia Atera</string>
-    <string name="save_recipe">Errezeta Gorde</string>
+    <string name="select_image">Irudia hautatu</string>
+    <string name="take_photo">Argazkia atera</string>
+    <string name="save_recipe">Errezeta gorde</string>
     <string name="settings">Ezarpenak</string>
-    <string name="confirm_theme">Gaia Baieztatu</string>
-    <string name="system_mode">Sistemaren Modua</string>
+    <string name="confirm_theme">Gaia baieztatu</string>
+    <string name="system_mode">Sistemaren modua</string>
     <string name="light">Argia</string>
     <string name="dark">Iluna</string>
     <string name="language">Hizkuntza</string>
-    <string name="confirm_language">Hizkuntza Baieztatu</string>
+    <string name="confirm_language">Hizkuntza baieztatu</string>
     <string name="spanish">Espainiera</string>
     <string name="english">Ingelesa</string>
     <string name="basque">Euskara</string>
+    <string name="starting_point">Bilboko Ingeniaritza Eskola</string>
+    <string name="unnamed_place">Izengabea</string>
+    <string name="restaurants">Jatetxeak</string>
+    <string name="cafes">Kafetegiak</string>
+    <string name="supermarkets">Supermerkatuak</string>
+    <string name="username">Erabiltzaile izena</string>
+    <string name="password">Pasahitza</string>
+    <string name="no_account">Oraindik ez daukazu konturik?</string>
+    <string name="register">Eman izena</string>
+    <string name="log_out">Saioa itxi</string>
+    <string name="log_in">Saioa hasi</string>
+    <string name="confirm_password">Pasahitza baieztatu</string>
+    <string name="create_profile">Profila sortu</string>
+    <string name="profile">Profila</string>
+    <string name="not_modify">(Ezin da aldatu)</string>
+    <string name="change_password">Pasahitza aldatu</string>
+    <string name="current_password">Egungo pasahitza</string>
+    <string name="verify">Egiaztatu</string>
+    <string name="new_password">Pasahitz berria</string>
+    <string name="save_changes">Aldaketak gorde</string>
 
     <string name="fill_all_fields">Eremu guztiak betetzea beharrezkoa da</string>
     <string name="recipe_add_ok">Errezeta modu egokian gorde da!</string>
@@ -36,7 +57,7 @@ aplikazioak irudi lehenetsia esleituko die errezetei.</string>
     <string name="camera_gallery_info_positive">Onartu</string>
     <string name="delete_title">Ziur zaude errezeta hau ezabatu nahi duzula?</string>
     <string name="delete_positive">Ezabatu</string>
-    <string name="delete_negative">Ezeztatu</string>
+    <string name="cancel">Ezeztatu</string>
     <string name="gallery_title">Argazki-galeriara sartzen utzi?</string>
     <string name="gallery_positive">Eman argazki-galeriara sartzeko baimena</string>
     <string name="gallery_info_title">Argazki-galeriarako sarbidea ez dago baimenduta</string>
@@ -44,4 +65,33 @@ aplikazioak irudi lehenetsia esleituko die errezetei.</string>
     <string name="recipe_update_error">Errorea errezeta eguneratzean</string>
     <string name="notification_message">Chef! Pentsatu duzu zer jango duzun bihar?</string>
     <string name="notification_subtext">Gogorarazpena</string>
+    <string name="location_not_available">Kokapena ez dago eskuragarri</string>
+    <string name="online">Online zaude!</string>
+    <string name="offline">Offline zaude</string>
+    <string name="map_title">Kokapena erabiltzen utzi?</string>
+    <string name="map_message">Zure gailuaren kokapena eskuragarri ez badago, aplikazioak ezin
+        izango ditu jatetxeak, kafetegiak eta supermerkatuak mapan markatu.</string>
+    <string name="map_positive">Kokapena eskuragarri jarri</string>
+    <string name="map_neutral">Kokapenik gabe jarraitu</string>
+    <string name="offline_not_load">Offline zaude, ezin dira gertu dauden lekuak markatu</string>
+    <string name="fetch_error">Errorea gertu dauden lekuak bilatzean</string>
+    <string name="loading_from_point">Gertu dauden lekuak kargatzen…</string>
+    <string name="location_not_found">Ez da kokapenik aurkitu</string>
+    <string name="map_instructions_title">Argibideak</string>
+    <string name="map_instructions">Dagokien botoien gainean sakatuz gero, jatetxeak, kafetegiak
+        eta supermerkatuak agertuko edo desagertuko dira, zure kokapenetik 1km-ko erradioan.
+        Mapako beste edozein puntu sakatuta mantentzen baduzu, puntu horretatik gertu dauden
+        lekuak markatuko dira.</string>
+    <string name="map_instructions_positive">Ados</string>
+    <string name="passwords_not_match">Sartutako balioak ez datoz bat</string>
+    <string name="connection_error">Errorea zerbitzarira konektatzean</string>
+    <string name="user_registered">Erabiltzailea erregistratu da</string>
+    <string name="user_already_exists">Erabiltzailea existitzen da jada</string>
+    <string name="error_registering_user">Errorea erabiltzailea erregistratzean</string>
+    <string name="login_successful">Arrakasta saioa hastean!</string>
+    <string name="invalid_credentials">Saio-hasiera baliogabea</string>
+    <string name="edit_profile_picture">Profileko irudia aldatu</string>
+    <string name="could_not_save_image">Irudia ezin izan da gorde</string>
+    <string name="image_updated">Argazkia eguneratu da</string>
+    <string name="error_fetching_data">Errorea datuak lortzean</string>
 </resources>
