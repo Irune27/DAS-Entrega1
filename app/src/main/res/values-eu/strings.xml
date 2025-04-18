@@ -24,7 +24,7 @@
     <string name="english">Ingelesa</string>
     <string name="basque">Euskara</string>
     <string name="starting_point">Bilboko Ingeniaritza Eskola</string>
-    <string name="unnamed_place">Izengabea</string>
+    <string name="unnamed">Izengabea</string>
     <string name="restaurants">Jatetxeak</string>
     <string name="cafes">Kafetegiak</string>
     <string name="supermarkets">Supermerkatuak</string>
@@ -43,6 +43,12 @@
     <string name="verify">Egiaztatu</string>
     <string name="new_password">Pasahitz berria</string>
     <string name="save_changes">Aldaketak gorde</string>
+    <string name="offline_info"><b>Offline modua</b>. Aplikazioan offline moduan sar zaitezke,
+        erregistratu edo saioa hasi gabe. Errezetak modu lokalean gordeko dira, zure
+        gailuan.</string>
+    <string name="offline_session">Jarraitu offline moduan</string>
+    <string name="exit">Irten</string>
+    <string name="enter_current_password">Sartu egungo pasahitza</string>
 
     <string name="fill_all_fields">Eremu guztiak betetzea beharrezkoa da</string>
     <string name="recipe_add_ok">Errezeta modu egokian gorde da!</string>
@@ -94,4 +100,11 @@ aplikazioak irudi lehenetsia esleituko die errezetei.</string>
     <string name="could_not_save_image">Irudia ezin izan da gorde</string>
     <string name="image_updated">Argazkia eguneratu da</string>
     <string name="error_fetching_data">Errorea datuak lortzean</string>
+    <string name="recipe_delete_ok">Errezeta behar bezala ezabatu da</string>
+    <string name="recipe_delete_error">Errorea errezeta ezabatzean</string>
+    <string name="logged_out">Saioa itxi da</string>
+    <string name="user_not_found">Erabiltzailea ez da aurkitu</string>
+    <string name="incorrect_password">Pasahitz okerra</string>
+    <string name="password_change_ok">Pasahitza eguneratu da!</string>
+    <string name="password_change_error">Errorea pasahitza aldatzean</string>
 </resources>

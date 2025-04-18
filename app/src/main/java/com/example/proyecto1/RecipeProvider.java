@@ -4,7 +4,6 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
-import android.content.Context;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -19,7 +18,6 @@ public class RecipeProvider extends ContentProvider {
     public static final String AUTHORITY = "com.example.proyecto1.provider";
     public static final String RECIPE_PATH = "recetas";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + RECIPE_PATH);
-
     private static final int RECIPES = 1;
     private static final int RECIPE_ID = 2;
 
@@ -42,9 +40,8 @@ public class RecipeProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection,
-                        @Nullable String selection, @Nullable String[] selectionArgs,
-                        @Nullable String sortOrder) {
+    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection,
+                        @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
         // consultar datos
         SQLiteDatabase db = myDB.getReadableDatabase();

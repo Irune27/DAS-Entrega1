@@ -2,9 +2,7 @@ package com.example.proyecto1;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,8 +14,6 @@ import androidx.work.Data;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import java.util.Locale;
-
 public class LoginActivity extends AppCompatActivity {
     private EditText usernameEditText, passwordEditText;
     @Override
@@ -28,21 +24,22 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
         int themeMode = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(themeMode);
-
-        String language = prefs.getString("language", "es");
-        setLocale(language);
-
+        AppUtils.setLocale(this);
         setContentView(R.layout.activity_login);
 
         usernameEditText = findViewById(R.id.userEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-
         Button login = findViewById(R.id.buttonLogin);
+        Button register = findViewById(R.id.buttonRegister);
+        Button offline = findViewById(R.id.buttonOffline);
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String username = usernameEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
+
+                // es necesario rellenar los campos de usuario y contraseña
                 if (username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, getString(R.string.fill_all_fields), Toast.LENGTH_SHORT).show();
                     return;
@@ -66,19 +63,21 @@ public class LoginActivity extends AppCompatActivity {
                                 boolean success = output.getBoolean("success", false);
                                 String serverMessage = output.getString("message");
                                 int userId = output.getInt("user_id", -1);
-
                                 String message;
 
                                 if (success) {
                                     message = getString(R.string.login_successful);
                                     Toast.makeText(LoginActivity.this, message, Toast.LENGTH_LONG).show();
 
+                                    // guardar el id del usuario para utilizar en la aplicación
+                                    SharedPreferences.Editor editor = prefs.edit();
+                                    editor.putInt("user_id", userId);
+                                    editor.apply();
+
                                     Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                                    intent.putExtra("user_id", userId);
                                     startActivity(intent);
                                     finish();
                                 } else {
-                                    Log.d("LoginDebug", "serverMessage: " + serverMessage);
                                     switch (serverMessage) {
                                         case "Connection error":
                                             message = getString(R.string.connection_error);
@@ -94,28 +93,26 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             }
                         });
-
                 WorkManager.getInstance(LoginActivity.this).enqueue(loginRequest);
-
             }
         });
 
-        Button register = findViewById(R.id.registerButton);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
+                finish();
             }
         });
-    }
 
-    private void setLocale(String languageCode) {
-        // establecer idioma
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        offline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(LoginActivity.this, MenuActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 }

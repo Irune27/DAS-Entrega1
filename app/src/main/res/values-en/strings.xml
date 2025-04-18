@@ -24,7 +24,7 @@
     <string name="english">English</string>
     <string name="basque">Basque</string>
     <string name="starting_point">Bilbao School of Engineering</string>
-    <string name="unnamed_place">Unnamed</string>
+    <string name="unnamed">Unnamed</string>
     <string name="restaurants">Restaurants</string>
     <string name="cafes">Cafes</string>
     <string name="supermarkets">Supermarkets</string>
@@ -43,6 +43,12 @@
     <string name="verify">Verify</string>
     <string name="new_password">New password</string>
     <string name="save_changes">Save changes</string>
+    <string name="offline_info"><b>Offline mode</b>. You can access the application in offline
+        mode, without registering or logging in. The recipes will be saved locally, on your
+        device.</string>
+    <string name="offline_session">Continue in offline mode</string>
+    <string name="exit">Exit</string>
+    <string name="enter_current_password">Enter your current password</string>
 
     <string name="fill_all_fields">All fields must be filled</string>
     <string name="recipe_add_ok">The recipe has been saved successfully!</string>
@@ -95,4 +101,11 @@
     <string name="could_not_save_image">Couldn\'t save image</string>
     <string name="image_updated">Image updated</string>
     <string name="error_fetching_data">Error when fetching the data</string>
+    <string name="recipe_delete_ok">The recipe has been deleted</string>
+    <string name="recipe_delete_error">Error when deleting recipe</string>
+    <string name="logged_out">You logged out</string>
+    <string name="user_not_found">User not found</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="password_change_ok">Password updated!</string>
+    <string name="password_change_error">Error when changing the password</string>
 </resources>

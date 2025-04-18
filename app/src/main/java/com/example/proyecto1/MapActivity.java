@@ -54,7 +54,6 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
     private final List<Marker> marketMarkers = new ArrayList<>();
     private NetworkChangeReceiver networkChangeReceiver;
     private boolean hasAlreadyLoadedPlaces = false;
-
     private boolean showRestaurants = true;
     private boolean showCafes = true;
     private boolean showMarkets = true;
@@ -63,6 +62,8 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppUtils.setLocale(this);
+
         // cargar/inicializar la configuración osmdroid
         Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
@@ -88,16 +89,17 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
         MapEventsOverlay eventsOverlay = new MapEventsOverlay(mReceive);
         map.getOverlays().add(eventsOverlay);
 
-        ImageButton zoomInButton = findViewById(R.id.zoom_in_button);
-        ImageButton zoomOutButton = findViewById(R.id.zoom_out_button);
+        ImageButton zoomInButton = findViewById(R.id.buttonZoomIn);
+        ImageButton zoomOutButton = findViewById(R.id.buttonZoomOut);
+        Button buttonRestaurants = findViewById(R.id.buttonRestaurants);
+        Button buttonCafes = findViewById(R.id.buttonCafes);
+        Button buttonMarkets = findViewById(R.id.buttonMarkets);
+        Button buttonCenterLocation = findViewById(R.id.buttonCenter);
+        Button buttonHelp = findViewById(R.id.buttonHelp);
+        Button buttonBack = findViewById(R.id.buttonBack);
 
-        zoomInButton.setOnClickListener(v -> {
-            map.getController().zoomIn();
-        });
-
-        zoomOutButton.setOnClickListener(v -> {
-            map.getController().zoomOut();
-        });
+        zoomInButton.setOnClickListener(v -> map.getController().zoomIn());
+        zoomOutButton.setOnClickListener(v -> map.getController().zoomOut());
 
         // añadir un marcador
         Marker startMarker = new Marker(map);
@@ -105,10 +107,6 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         startMarker.setTitle(getString(R.string.starting_point));
         map.getOverlays().add(startMarker);
-
-        Button buttonRestaurants = findViewById(R.id.buttonRestaurants);
-        Button buttonCafes = findViewById(R.id.buttonCafes);
-        Button buttonMarkets = findViewById(R.id.buttonMarkets);
 
         buttonRestaurants.setOnClickListener(v -> {
             showRestaurants = !showRestaurants;
@@ -125,7 +123,6 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
             updateMarkers();
         });
 
-        Button buttonCenterLocation = findViewById(R.id.center_location);
         buttonCenterLocation.setOnClickListener(v -> {
             if (locationOverlay != null && locationOverlay.getMyLocation() != null) {
                 // getMyLocation devuelve la última ubicación conocida, si no null
@@ -137,16 +134,12 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
             }
         });
 
-        Button buttonBack = findViewById(R.id.buttonBack);
-        buttonBack.setOnClickListener(v -> {
-            finish();
-        });
-
-        Button buttonHelp = findViewById(R.id.help);
         buttonHelp.setOnClickListener(v -> {
             DialogFragment dialogoMapaInfo = new DialogMapInfo();
             dialogoMapaInfo.show(getSupportFragmentManager(), "etiqueta7");
         });
+
+        buttonBack.setOnClickListener(v -> finish());
     }
 
     @Override
@@ -220,8 +213,8 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
     }
 
     private void setupUserLocation() {
-        // pantalla de carga
-        View loadingOverlay = findViewById(R.id.location_loading_overlay);
+        // poner pantalla de carga
+        View loadingOverlay = findViewById(R.id.loadingOverlay);
         loadingOverlay.setVisibility(View.VISIBLE);
 
         // asegurar que el overlay de ubicación esté inicializado una sola vez
@@ -237,6 +230,7 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
         handler.postDelayed(() -> {
             GeoPoint location = locationOverlay.getMyLocation();
             Log.d("Location", "location: " + location);
+
             // usar LocationManager si osmdroid todavía no ha dado una ubicación
             if (location == null) {
                 Location best = getLastBestLocation();
@@ -246,10 +240,11 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
                     location = new GeoPoint(best.getLatitude(), best.getLongitude());
                 }
             }
+
             // si tras 5 intentos no hay ubicación válida, detener y avisar al usuario
             if (location == null) {
                 locationAttempts++;
-                if (locationAttempts < 5) { // máximo 5 intentos
+                if (locationAttempts < 5) {
                     handler.postDelayed(this::setupUserLocation, 2000);
                 } else {
                     loadingOverlay.setVisibility(View.GONE);
@@ -257,6 +252,7 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
                 }
                 return;
             }
+
             map.getController().setCenter(location);
             BoundingBox box = null;
             // si el usuario está online, se cargarán los marcadores en el mapa
@@ -272,6 +268,7 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
                 // limitar el mapa visible al usuario a 2km en todas las direcciones
                 box = getBoundingBox(location, 2000);
             }
+
             map.setScrollableAreaLimitDouble(box);
             // quitar la pantalla de carga
             loadingOverlay.setVisibility(View.GONE);
@@ -293,7 +290,6 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
         }
         return bestLocation;
     }
-
 
     private boolean isOnline() {
         // comprobar si el usuario está online
@@ -317,7 +313,6 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
                 center.getLongitude() - lonOffset
         );
     }
-
 
     private void loadNearbyPlaces(GeoPoint location, String type) {
         new Thread(() -> {
@@ -364,10 +359,11 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
                                 name = tags.optString("name", "");
                             }
 
+                            // poner markers en los lugares devueltos
                             Marker m = new Marker(map);
                             m.setPosition(new GeoPoint(eLat, eLon));
                             m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-                            m.setTitle(name.isEmpty() ? getString(R.string.unnamed_place) : name);
+                            m.setTitle(name.isEmpty() ? getString(R.string.unnamed) : name);
                             m.setIcon(getMarkerColor(type));
                             map.getOverlays().add(m);
 
@@ -379,9 +375,8 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
                         }
                     }
                     updateMarkers();
-                    map.invalidate(); // volver a cargar el mapa
+                    map.invalidate();
                 });
-
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() ->
@@ -413,10 +408,8 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         if (requestCode == 3) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setupUserLocation();

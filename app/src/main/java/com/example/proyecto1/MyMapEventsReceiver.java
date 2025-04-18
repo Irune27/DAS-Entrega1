@@ -25,7 +25,8 @@ public class MyMapEventsReceiver implements org.osmdroid.events.MapEventsReceive
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
-        return false; // no hacemos nada con un solo toque
+        // no hacemos nada con un solo toque
+        return false;
     }
 
     @Override
@@ -35,7 +36,6 @@ public class MyMapEventsReceiver implements org.osmdroid.events.MapEventsReceive
         // limpiar marcadores anteriores y cargar nuevos desde el punto pulsado
         markerManager.clearAllPlaceMarkers();
         markerManager.loadPlacesFromPoint(p);
-
         return true;
     }
 }

@@ -23,7 +23,7 @@
     <string name="english">Inglés</string>
     <string name="basque">Euskera</string>
     <string name="starting_point">Escuela de Ingeniería de Bilbao</string>
-    <string name="unnamed_place">Sin nombre</string>
+    <string name="unnamed">Sin nombre</string>
     <string name="restaurants">Restaurantes</string>
     <string name="cafes">Cafeterías</string>
     <string name="supermarkets">Supermercados</string>
@@ -42,6 +42,12 @@
     <string name="verify">Verificar</string>
     <string name="new_password">Nueva contraseña</string>
     <string name="save_changes">Guardar cambios</string>
+    <string name="offline_info"><b>Modo offline</b>. Puedes entrar a la aplicación en modo offline,
+        sin registrarte o iniciar sesión. Las recetas se guardarán de manera local, en tu
+        dispositivo.</string>
+    <string name="offline_session">Continuar en modo offline</string>
+    <string name="exit">Salir</string>
+    <string name="enter_current_password">Introduce tu contraseña actual</string>
 
     <string name="fill_all_fields">Es necesario rellenar todos los campos</string>
     <string name="recipe_add_ok">¡La receta se ha añadido correctamente!</string>
@@ -93,4 +99,11 @@
     <string name="could_not_save_image">No se pudo guardar la imagen</string>
     <string name="image_updated">Foto actualizada</string>
     <string name="error_fetching_data">Error al obtener los datos</string>
+    <string name="recipe_delete_ok">La receta se ha borrado correctamente</string>
+    <string name="recipe_delete_error">Error al borrar la receta</string>
+    <string name="logged_out">Sesión cerrada</string>
+    <string name="user_not_found">Usuario no encontrado</string>
+    <string name="incorrect_password">Contraseña incorrecta</string>
+    <string name="password_change_ok">¡Contraseña actualizada!</string>
+    <string name="password_change_error">Error al cambiar la contraseña</string>
 </resources>

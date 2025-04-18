@@ -20,74 +20,74 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class BaseRecipeActivity extends AppCompatActivity {
+
+    public interface OnImageUploadListener {
+        void onImageUploaded(String imagePathOnServer);
+    }
 
     protected ImageView recipeImage;
     protected Uri imageUri = null;
     protected String imagePath = String.valueOf(R.drawable.default_image);
-
-    private void launchGallery() {
-        Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        pickImageLauncher.launch(pickIntent);
-    }
-
-    private void showPermissionDialog() {
-        DialogFragment dialogoGallery = new DialogGallery();
-        dialogoGallery.show(getSupportFragmentManager(), "etiqueta1");
-    }
+    protected String imagePathOnServer = "recipe_images/default_image.jpg";
 
     protected void openImageChooser() {
-        // comprobar la API, porque el permiso es diferente (Android 13+, API 33)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            // si el permiso está concedido
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-                launchGallery();
+        AppUtils.checkImagePermission(this, new AppUtils.PermissionCallback() {
+            @Override
+            public void onPermissionGranted() {
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickImageLauncher.launch(pickIntent);
             }
-            // si ya se ha solicitado el permiso anteriormente, pero el usuario lo ha rechazado
-            else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_MEDIA_IMAGES)) {
-                showPermissionDialog();
+
+            @Override
+            public void showRationaleDialog() {
+                DialogFragment dialogoGallery = new DialogGallery();
+                dialogoGallery.show(getSupportFragmentManager(), "etiqueta1");
             }
-            // solicitar permiso
-            else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_MEDIA_IMAGES}, 1);
+
+            @Override
+            public void onPermissionDenied() {
+                DialogFragment dialogoGalleryInfo = new DialogGalleryInfo();
+                dialogoGalleryInfo.show(getSupportFragmentManager(), "etiqueta3");
             }
-        }
-        // comprobar la API, porque el permiso es diferente (Android 10-12, API 29-32)
-        else {
-            // si el permiso está concedido
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                launchGallery();
-            }
-            // si ya se ha solicitado el permiso anteriormente, pero el usuario lo ha rechazado
-            else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                showPermissionDialog();
-            }
-            // solicitar permiso
-            else {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-            }
-        }
+        });
     }
 
     protected void openCamera() {
-        // si el permiso está concedido
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            takePictureLauncher.launch(cameraIntent);
-        }
-        // si ya se ha solicitado el permiso anteriormente, pero el usuario lo ha rechazado
-        else if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.CAMERA)) {
-            DialogFragment dialogoCamera = new DialogCamera();
-            dialogoCamera.show(getSupportFragmentManager(), "etiqueta2");
-        }
-        // solicitar permiso
-        else {
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.CAMERA},2);
-        }
+        AppUtils.checkCameraPermission(this, new AppUtils.PermissionCallback() {
+            @Override
+            public void onPermissionGranted() {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                takePictureLauncher.launch(cameraIntent);
+            }
+
+            @Override
+            public void showRationaleDialog() {
+                DialogFragment dialogoCamera = new DialogCamera();
+                dialogoCamera.show(getSupportFragmentManager(), "etiqueta2");
+            }
+
+            @Override
+            public void onPermissionDenied() {
+                DialogFragment dialogoCameraInfo = new DialogCameraInfo();
+                dialogoCameraInfo.show(getSupportFragmentManager(), "etiqueta4");
+            }
+        });
     }
 
     protected final ActivityResultLauncher<Intent> pickImageLauncher =
@@ -98,7 +98,7 @@ public class BaseRecipeActivity extends AppCompatActivity {
                         // mostrar la imagen en la pantalla y recuperar la ruta donde se ha guardado
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
                         recipeImage.setImageBitmap(bitmap);
-                        imagePath = saveImageToExternalStorage(bitmap);
+                        imagePath = AppUtils.saveImageToExternalStorage(this, bitmap, "recipe_");
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -112,45 +112,43 @@ public class BaseRecipeActivity extends AppCompatActivity {
                     if (photo != null) {
                         // mostrar la imagen en la pantalla y recuperar la ruta donde se ha guardado
                         recipeImage.setImageBitmap(photo);
-                        imagePath = saveImageToExternalStorage(photo);
+                        imagePath = AppUtils.saveImageToExternalStorage(this, photo, "recipe_");
                     }
                 }
             });
 
-    protected String saveImageToExternalStorage(Bitmap bitmap) {
-        // comprobar si hay espacio libre en el almacenamiento externo
-        if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            Toast.makeText(this, this.getString(R.string.external_storage), Toast.LENGTH_SHORT).show();
-            return "";
+    public void uploadImageToServer(String image, OnImageUploadListener listener) {
+        Log.d("Image", "image: " + image);
+        if (image.endsWith(".jpg")) {
+            String urlServer = "http://ec2-51-44-167-78.eu-west-3.compute.amazonaws.com/ipalacios017/WEB/upload_recipe_image.php";
+            String fileName = "recipe_" + System.currentTimeMillis() + ".jpg";
+
+            AppUtils.uploadImageToServer(imagePath, urlServer, null, "image",
+                    fileName, new AppUtils.UploadCallback() {
+                        @Override
+                        public void onSuccess(String serverResponse) {
+                            try {
+                                JSONObject json = new JSONObject(serverResponse);
+                                if (json.getBoolean("success")) {
+                                    imagePathOnServer = json.getString("image_path");
+                                    Log.d("Upload", "Image path on server: " + imagePathOnServer);
+
+                                    runOnUiThread(() -> listener.onImageUploaded(imagePathOnServer));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Log.e("Upload", "Error when uploading image");
+                        }
+                    });
+
+        } else {
+            listener.onImageUploaded(imagePathOnServer);
         }
-        try {
-            // guardar la imagen (comprimida) en el almacenamiento externo
-            bitmap = scaleBitmap(bitmap, 800, 800);
-
-            File directory = getExternalFilesDir(null);
-            // asignarle un nombre único
-            File imageFile = new File(directory, "recipe_" + System.currentTimeMillis() + ".jpg");
-
-            FileOutputStream fos = new FileOutputStream(imageFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
-            fos.close();
-
-            return imageFile.getAbsolutePath();
-        } catch (IOException e) {
-            Log.e("ImageSaveError", "Error saving image", e);
-            return "";
-        }
-    }
-
-    private Bitmap scaleBitmap(Bitmap bitmap, int maxWidth, int maxHeight) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        float scale = Math.min((float) maxWidth / width, (float) maxHeight / height);
-
-        int newWidth = Math.round(width * scale);
-        int newHeight = Math.round(height * scale);
-
-        return Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true);
     }
 
     @Override

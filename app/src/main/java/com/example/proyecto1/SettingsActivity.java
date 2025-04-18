@@ -2,7 +2,6 @@ package com.example.proyecto1;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,20 +11,15 @@ import android.widget.RadioGroup;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import java.util.Locale;
-
 public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // ajustar el idioma y el tema según las preferencias
         SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
-
         int themeMode = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-
         String language = prefs.getString("language", "es");
-        setLocale(language);
-
+        AppUtils.setLocale(this);
         setContentView(R.layout.activity_settings);
 
         RadioGroup radioGroupTheme = findViewById(R.id.radioGroupTheme);
@@ -96,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("language", newLanguage);
             editor.apply();
-            setLocale(newLanguage);
+            AppUtils.setLocale(this, newLanguage);
             recreate();
         });
 
@@ -110,14 +104,5 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
-
-    private void setLocale(String languageCode) {
-        // establecer idioma
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }

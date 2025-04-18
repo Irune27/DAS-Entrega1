@@ -88,7 +88,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/map_controls"
+        android:id="@+id/mapControls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -102,7 +102,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:id="@+id/help"
+            android:id="@+id/buttonHelp"
             style="@style/ButtonStyle"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -112,7 +112,7 @@
             app:iconSize="22dp" />
 
         <ImageButton
-            android:id="@+id/zoom_out_button"
+            android:id="@+id/buttonZoomOut"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginEnd="10dp"
@@ -120,7 +120,7 @@
             android:src="@drawable/minus" />
 
         <ImageButton
-            android:id="@+id/zoom_in_button"
+            android:id="@+id/buttonZoomIn"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginEnd="24dp"
@@ -128,7 +128,7 @@
             android:src="@drawable/plus" />
 
         <Button
-            android:id="@+id/center_location"
+            android:id="@+id/buttonCenter"
             style="@style/ButtonStyle"
             android:layout_width="70dp"
             android:layout_height="70dp"
@@ -140,7 +140,7 @@
 
 
     <FrameLayout
-        android:id="@+id/location_loading_overlay"
+        android:id="@+id/loadingOverlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#CC000000"

@@ -1,7 +1,5 @@
 package com.example.proyecto1;
 
-import static android.content.Intent.FLAG_ACTIVITY_SINGLE_TOP;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,6 +11,7 @@ public class ShowRecipeActivity extends AppCompatActivity implements RecipeFragm
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppUtils.setLocale(this);
         setContentView(R.layout.activity_show_recipe);
 
         int code = getIntent().getIntExtra("code", -1);
@@ -42,13 +41,11 @@ public class ShowRecipeActivity extends AppCompatActivity implements RecipeFragm
             intent.putExtra("recipe_ingredients", getIntent().getStringExtra("recipe_ingredients"));
             intent.putExtra("recipe_steps", getIntent().getStringExtra("recipe_steps"));
             intent.putExtra("selected_position", getIntent().getIntExtra("selected_position", -1));
-            intent.setFlags(FLAG_ACTIVITY_SINGLE_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
             finish();
         }
     }
-
-
 
     @Override
     public void onRecipeSelected(int pos) {

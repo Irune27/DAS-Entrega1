@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -24,7 +23,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/deleteButton"
+                android:id="@+id/buttonDelete"
                 android:layout_width="65dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="20dp"
@@ -35,10 +34,10 @@
                 app:iconPadding="0dp"
                 app:iconSize="18dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editButton" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonEdit" />
 
             <Button
-                android:id="@+id/editButton"
+                android:id="@+id/buttonEdit"
                 style="@style/ButtonStyle"
                 android:layout_width="65dp"
                 android:layout_height="48dp"
@@ -48,10 +47,10 @@
                 app:iconPadding="0dp"
                 app:iconSize="22dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stepsButton" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonSteps" />
 
             <Button
-                android:id="@+id/ingredientsButton"
+                android:id="@+id/buttonIngredients"
                 style="@style/ButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +61,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/stepsButton"
+                android:id="@+id/buttonSteps"
                 style="@style/ButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,7 +69,7 @@
                 android:layout_marginTop="10dp"
                 android:text="@string/steps"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientsButton" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonIngredients" />
 
             <TextView
                 android:id="@+id/textViewContent"
@@ -80,7 +79,7 @@
                 android:layout_marginStart="55dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/steps"
-                app:layout_constraintStart_toEndOf="@id/ingredientsButton"
+                app:layout_constraintStart_toEndOf="@id/buttonIngredients"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ScrollView
@@ -93,7 +92,7 @@
                 android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ingredientsButton"
+                app:layout_constraintStart_toEndOf="@+id/buttonIngredients"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
@@ -105,7 +104,7 @@
             </ScrollView>
 
             <Button
-                android:id="@+id/backButton"
+                android:id="@+id/buttonBack"
                 style="@style/ButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -113,12 +112,12 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/back"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/deleteButton" />
+                app:layout_constraintTop_toBottomOf="@+id/buttonDelete" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/buttonAdd"
         style="@style/ButtonStyle"
         android:layout_width="63dp"
         android:layout_height="61dp"

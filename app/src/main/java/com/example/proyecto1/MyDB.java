@@ -52,7 +52,6 @@ public class MyDB extends SQLiteOpenHelper {
         return database.rawQuery("SELECT Name, Image FROM Recetas", null);
     }
 
-
     public long addRecipe(String name, String imagePath, String ingredients, String steps) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();

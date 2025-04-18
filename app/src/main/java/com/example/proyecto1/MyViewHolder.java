@@ -16,8 +16,8 @@ public class MyViewHolder extends RecyclerView.ViewHolder implements RecipeFragm
 
     public MyViewHolder (@NonNull View itemView){
         super(itemView);
-        text=itemView.findViewById(R.id.texto);
-        image=itemView.findViewById(R.id.foto);
+        text = itemView.findViewById(R.id.texto);
+        image = itemView.findViewById(R.id.foto);
         relativeLayout = itemView.findViewById(R.id.relativeLayout);
         itemView.setOnClickListener(v -> {
             int position = getAdapterPosition();

@@ -1,6 +1,9 @@
 package com.example.proyecto1;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -9,10 +12,17 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -24,8 +34,7 @@ public class RecyclerViewFragment extends Fragment {
 
     private RecyclerView list;
     private MyAdapter adapter;
-    private ArrayList<String> recipeNames;
-    private ArrayList<String> images;
+    private ArrayList<String> recipeNames, images;
     private recipeListener listener;
 
     public RecyclerViewFragment() {
@@ -36,11 +45,14 @@ public class RecyclerViewFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-        list = view.findViewById(R.id.recyclerViewFragment);
+        list = view.findViewById(R.id.recyclerView);
         recipeNames = new ArrayList<>();
         images = new ArrayList<>();
 
-        adapter = new MyAdapter(recipeNames, images, pos -> {
+        SharedPreferences prefs = getContext().getSharedPreferences("AppSettings", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+
+        adapter = new MyAdapter(getContext(), recipeNames, images, pos -> {
             if (listener != null) {
                 listener.onRecipeSelected(pos);
             }
@@ -50,8 +62,10 @@ public class RecyclerViewFragment extends Fragment {
                 LinearLayoutManager.VERTICAL, false);
         list.setLayoutManager(layoutManager);
 
-        // actualizar las recetas que se muestran con la lista de recetas de la base de datos
-        loadRecipes();
+        // actualizar las recetas que se muestran con la lista de recetas del servidor
+        if (userId != -1) fetchRecipesFromServer(userId);
+            // actualizar las recetas que se muestran con la lista de recetas de la base de datos local
+        else loadRecipes();
 
         return view;
     }
@@ -73,28 +87,31 @@ public class RecyclerViewFragment extends Fragment {
     }
 
     private void loadRecipes() {
-        recipeNames.clear();
-        images.clear();
+        AppUtils.loadRecipesFromLocal(requireContext(), (names, imgs) -> {
+            recipeNames.clear();
+            // se devuelve la lista entera de nombres de recetas
+            recipeNames.addAll(names);
 
-        // recuperar el nombre y la imagen de todas las recetas de la base de datos
-        String[] projection = {"Name", "Image"};
-        Cursor cursor = requireContext().getContentResolver().query(RecipeProvider.CONTENT_URI,
-                projection, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                recipeNames.add(cursor.getString(0));
-                String image = cursor.getString(1);
-                if (image != null && !image.isEmpty()) {
-                    images.add(image);
-                } else {
-                    images.add("");
-                }
+            images.clear();
+            // se devuelve la lista entera de rutas a las imágenes de las recetas
+            images.addAll(imgs);
 
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
+            adapter.updateData(recipeNames, images, listener::onRecipeSelected);
+        });
+    }
 
-        adapter.updateData(recipeNames, images, listener::onRecipeSelected);
+    private void fetchRecipesFromServer(int userId) {
+        AppUtils.fetchRecipesFromServer(requireContext(), getViewLifecycleOwner(), userId, (names, imgs) -> {
+            recipeNames.clear();
+            // se devuelve la lista entera de nombres de recetas
+            recipeNames.addAll(names);
+
+            images.clear();
+            // se devuelve la lista entera de rutas a las imágenes de las recetas
+            images.addAll(imgs);
+
+            adapter.updateData(recipeNames, images, listener::onRecipeSelected);
+        });
     }
 
     @Override

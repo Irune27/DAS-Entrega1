@@ -7,12 +7,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
+    private final NetworkListener listener;
+
     public interface NetworkListener {
         void onNetworkAvailable();
         void onNetworkLost();
     }
-
-    private final NetworkListener listener;
 
     public NetworkChangeReceiver(NetworkListener listener) {
         this.listener = listener;

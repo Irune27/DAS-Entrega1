@@ -1,7 +1,6 @@
 package com.example.proyecto1;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
@@ -42,31 +41,73 @@ public class ConnectionWorker extends Worker {
             // construir el JSON con los datos
             JSONObject jsonParam = new JSONObject();
 
-            if (action.equals("register") || action.equals("login")) {
-                String username = getInputData().getString("username");
-                String password = getInputData().getString("password");
-
-                jsonParam.put("username", username);
-                jsonParam.put("password", password);
-            } else if (action.equals("get_user_info")) {
-                int userId = getInputData().getInt("user_id", -1);
-                jsonParam.put("user_id", userId);
-            } else if (action.equals("verify_password")) {
-                int userId = getInputData().getInt("user_id", -1);
-                String currentPassword = getInputData().getString("current_password");
-
-                jsonParam.put("action", action);
-                jsonParam.put("user_id", userId);
-                jsonParam.put("current_password", currentPassword);
-            } else if (action.equals("change_password")) {
-                int userId = getInputData().getInt("user_id", -1);
-                String newPassword = getInputData().getString("new_password");
-
-                jsonParam.put("action", action);
-                jsonParam.put("user_id", userId);
-                jsonParam.put("new_password", newPassword);
-            } else {
-                return Result.failure();
+            // fallthrough para agrupar casos: dejar que continúe sin break
+            Data inputData = getInputData();
+            switch (action) {
+                case "register":
+                case "login": {
+                    String username = inputData.getString("username");
+                    String password = inputData.getString("password");
+                    jsonParam.put("username", username);
+                    jsonParam.put("password", password);
+                    break;
+                }
+                case "get_user_info":
+                case "get_recipe_names":
+                case "get_recipes": {
+                    int userId = inputData.getInt("user_id", -1);
+                    jsonParam.put("user_id", userId);
+                    break;
+                }
+                case "verify_password": {
+                    int userId = inputData.getInt("user_id", -1);
+                    String currentPassword = inputData.getString("current_password");
+                    jsonParam.put("action", action);
+                    jsonParam.put("user_id", userId);
+                    jsonParam.put("current_password", currentPassword);
+                    break;
+                }
+                case "change_password": {
+                    int userId = inputData.getInt("user_id", -1);
+                    String newPassword = inputData.getString("new_password");
+                    jsonParam.put("action", action);
+                    jsonParam.put("user_id", userId);
+                    jsonParam.put("new_password", newPassword);
+                    break;
+                }
+                case "save_recipe": {
+                    String name = inputData.getString("name");
+                    String image = inputData.getString("image");
+                    String ingredients = inputData.getString("ingredients");
+                    String steps = inputData.getString("steps");
+                    int userId = inputData.getInt("user_id", -1);
+                    jsonParam.put("name", name);
+                    jsonParam.put("image", image);
+                    jsonParam.put("ingredients", ingredients);
+                    jsonParam.put("steps", steps);
+                    jsonParam.put("user_id", userId);
+                    break;
+                }
+                case "update_recipe": {
+                    int code = inputData.getInt("code", -1);
+                    String name = inputData.getString("name");
+                    String image = inputData.getString("image");
+                    String ingredients = inputData.getString("ingredients");
+                    String steps = inputData.getString("steps");
+                    jsonParam.put("code", code);
+                    jsonParam.put("name", name);
+                    jsonParam.put("image", image);
+                    jsonParam.put("ingredients", ingredients);
+                    jsonParam.put("steps", steps);
+                    break;
+                }
+                case "delete_recipe": {
+                    int code = inputData.getInt("code", -1);
+                    jsonParam.put("code", code);
+                    break;
+                }
+                default:
+                    return Result.failure();
             }
 
             OutputStream os = conn.getOutputStream();
@@ -88,23 +129,38 @@ public class ConnectionWorker extends Worker {
             boolean success = response.getBoolean("success");
             output.putBoolean("success", success);
 
-            if (action.equals("register") || action.equals("login")) {
-                output.putString("message", response.getString("message"));
-                try {
-                    output.putInt("user_id", response.getInt("user_id"));
-                } catch (JSONException e) {
-                    output.putInt("user_id", -1);
-                }
-            } else if (action.equals("get_user_info")) {
-                if (success) {
-                    output.putString("username", response.getString("username"));
-                    output.putString("profile_image", response.getString("profile_image"));
-                } else {
+            // fallthrough para agrupar casos: dejar que continúe sin break
+            switch (action) {
+                case "register":
+                case "login": {
                     output.putString("message", response.getString("message"));
+                    try {
+                        output.putInt("user_id", response.getInt("user_id"));
+                    } catch (JSONException e) {
+                        output.putInt("user_id", -1);
+                    }
+                    break;
                 }
-            } else {
-                output.putString("message", response.getString("message"));
+                case "get_user_info": {
+                    if (success) {
+                        output.putString("username", response.getString("username"));
+                        output.putString("profile_image", response.getString("profile_image"));
+                    } else {
+                        output.putString("message", response.getString("message"));
+                    }
+                    break;
+                }
+                case "get_recipe_names":
+                case "get_recipes": {
+                    output.putString("recipes_json", response.getString("recipes_json"));
+                    break;
+                }
+                default: {
+                    output.putString("message", response.getString("message"));
+                    break;
+                }
             }
+
             return Result.success(output.build());
 
         } catch (Exception e) {

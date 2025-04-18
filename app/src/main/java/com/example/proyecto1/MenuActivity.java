@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -35,12 +34,13 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
-import java.util.Locale;
 
 public class MenuActivity extends AppCompatActivity {
-    private int userId;
-    private String username;
-    private String profileImage;
+    private String username, profileImage;
+    private Button profileButton;
+    private ImageView userImageView;
+    private TextView userText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,16 +49,19 @@ public class MenuActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
         int themeMode = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(themeMode);
-
-        String language = prefs.getString("language", "es");
-        setLocale(language);
-
+        AppUtils.setLocale(this);
         setContentView(R.layout.activity_menu);
 
-        userId = getIntent().getIntExtra("user_id", -1);
-        loadUserData(userId);
+        int userId = prefs.getInt("user_id", -1);
 
+        userImageView = findViewById(R.id.userImage);
+        userText = findViewById(R.id.userTextView);
         Button buttonRecipes = findViewById(R.id.buttonRecipes);
+        Button buttonMap = findViewById(R.id.buttonMap);
+        Button settingsButton = findViewById(R.id.buttonSettings);
+        profileButton = findViewById(R.id.buttonProfile);
+        Button exitButton = findViewById(R.id.buttonExit);
+
         buttonRecipes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,7 +70,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonMap = findViewById(R.id.buttonMap);
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,25 +78,42 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        Button settingsButton = findViewById(R.id.settings);
-        if (settingsButton != null) {
-            settingsButton.setOnClickListener(v -> {
-                // lanzar SettingsActivity
-                Intent intent = new Intent(MenuActivity.this, SettingsActivity.class);
-                startActivity(intent);
-                // destruir MenuActivity, para recrearla luego y que se actualice correctamente
-                finish();
-            });
-        }
+        settingsButton.setOnClickListener(v -> {
+            // lanzar SettingsActivity
+            Intent intent = new Intent(MenuActivity.this, SettingsActivity.class);
+            startActivity(intent);
+            // destruir MenuActivity, para recrearla luego y que se actualice correctamente
+            finish();
+        });
 
-        Button profileButton = findViewById(R.id.profileButton);
-        if (profileButton != null) {
+        if (userId != -1) {
+            // modo online
+            loadUserData(userId);
+            profileButton.setEnabled(true);
+            profileButton.setAlpha(1.0f);
             profileButton.setOnClickListener(v -> {
                 Intent intent = new Intent(MenuActivity.this, ProfileActivity.class);
-                intent.putExtra("user_id", userId);
                 intent.putExtra("username", username);
                 intent.putExtra("profile_image", profileImage);
                 startActivity(intent);
+            });
+        }
+        else {
+            // modo offline
+            profileButton.setEnabled(false);
+            profileButton.setAlpha(0.5f);
+        }
+
+        if (exitButton != null) {
+            exitButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // arrancar una nueva pila de actividades y borrar la anterior
+                    Toast.makeText(MenuActivity.this, getString(R.string.logged_out), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(MenuActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
             });
         }
 
@@ -113,11 +132,19 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // control de la pila de actividades
-        Log Log = null;
-        Log.d("BackStack", "Back stack size MenuActivity: " +
-                this.getSupportFragmentManager().getBackStackEntryCount());
-        loadUserData(userId);
+
+        SharedPreferences prefs = getSharedPreferences("AppSettings", MODE_PRIVATE);
+        int userId = prefs.getInt("user_id", -1);
+
+        if (userId != -1) {
+            loadUserData(userId);
+            profileButton.setEnabled(true);
+            profileButton.setAlpha(1.0f);
+        }
+        else {
+            profileButton.setEnabled(false);
+            profileButton.setAlpha(0.5f);
+        }
     }
 
     private void createNotificationChannel() {
@@ -159,15 +186,6 @@ public class MenuActivity extends AppCompatActivity {
                 pendingIntent);
     }
 
-    private void setLocale(String languageCode) {
-        // establecer idioma
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-    }
-
     private void loadUserData(int userId) {
         Data inputData = new Data.Builder()
                 .putString("action", "get_user_info")
@@ -186,41 +204,14 @@ public class MenuActivity extends AppCompatActivity {
                         Data resultData = workInfo.getOutputData();
                         if (resultData.getBoolean("success", false)) {
                             username = resultData.getString("username");
-                            profileImage = resultData.getString("profile_image");
-                            Log.d("Profile image", "The image:" + profileImage);
-
-                            ImageView userImageView = findViewById(R.id.userImage);
-                            String imageUrl = "http://ec2-51-44-167-78.eu-west-3.compute.amazonaws.com/ipalacios017/WEB/" + profileImage;
-
-                            new Thread(() -> {
-                                try {
-                                    URL url = new URL(imageUrl);
-                                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                                    conn.setDoInput(true);
-                                    conn.connect();
-
-                                    int responseCode = conn.getResponseCode();
-                                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                                        InputStream input = conn.getInputStream();
-                                        Bitmap bitmap = BitmapFactory.decodeStream(input);
-
-                                        runOnUiThread(() -> userImageView.setImageBitmap(bitmap));
-                                    } else {
-                                        Log.e("ImageError", "Error code: " + responseCode);
-                                    }
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }).start();
-
-                            TextView userText = findViewById(R.id.userTextView);
                             userText.setText(username);
+                            profileImage = resultData.getString("profile_image");
+                            AppUtils.loadImage(this, profileImage, userImageView);
                         } else {
                             Toast.makeText(this, getString(R.string.error_fetching_data), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-
         WorkManager.getInstance(getApplicationContext()).enqueue(infoRequest);
     }
 }

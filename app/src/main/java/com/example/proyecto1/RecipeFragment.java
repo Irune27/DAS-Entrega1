@@ -2,9 +2,11 @@ package com.example.proyecto1;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
@@ -15,12 +17,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 public class RecipeFragment extends Fragment {
@@ -30,17 +38,9 @@ public class RecipeFragment extends Fragment {
     }
 
     private ImageView recipeImageView;
-    private TextView recipeTextView;
-    private TextView ingredientsTextView;
-    private TextView contentTextView;
-    private TextView stepsTextView;
-    private TextView labelTextView;
-    private String recipeName;
-    private String recipeIngredients;
-    private String recipeSteps;
-    private String recipeImagePath;
+    private TextView recipeTextView, ingredientsTextView, contentTextView, stepsTextView, labelTextView;
+    private String recipeName, recipeIngredients, recipeSteps, recipeImagePath;
     private int recipeId;
-
     private recipeListener listener;
 
     public RecipeFragment() {
@@ -48,19 +48,18 @@ public class RecipeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recipe, container, false);
         int orientation = getResources().getConfiguration().orientation;
+
         if (orientation == Configuration.ORIENTATION_PORTRAIT) {
             recipeTextView = view.findViewById(R.id.recipe_name);
             recipeImageView = view.findViewById(R.id.recipe_image);
             ingredientsTextView = view.findViewById(R.id.recipe_ingredients);
             stepsTextView = view.findViewById(R.id.recipe_steps);
+            Button back2ListButton = view.findViewById(R.id.buttonToList);
 
             recipeTextView.setMovementMethod(new ScrollingMovementMethod());
-
-            Button back2ListButton = view.findViewById(R.id.back2ListButton);
             if (back2ListButton != null) {
                 back2ListButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -71,32 +70,27 @@ public class RecipeFragment extends Fragment {
                     }
                 });
             }
-
-            Button backButton = view.findViewById(R.id.backButton);
-            if (backButton != null) {
-                backButton.setOnClickListener(v -> {
-                    requireActivity().getSupportFragmentManager().popBackStack();
-                    getActivity().finish();
-                });
-            }
         }
         else {
             contentTextView = view.findViewById(R.id.recipe_content);
             labelTextView = view.findViewById(R.id.textViewContent);
-            Button ingredientsButton = view.findViewById(R.id.ingredientsButton);
+            Button ingredientsButton = view.findViewById(R.id.buttonIngredients);
+            Button stepsButton = view.findViewById(R.id.buttonSteps);
+
             ingredientsButton.setOnClickListener(v -> {
                 contentTextView.setText(recipeIngredients);
                 labelTextView.setText(R.string.ingredients);
             });
 
-            Button stepsButton = view.findViewById(R.id.stepsButton);
             stepsButton.setOnClickListener(v -> {
                 contentTextView.setText(recipeSteps);
                 labelTextView.setText(R.string.steps);
             });
         }
 
-        Button editButton = view.findViewById(R.id.editButton);
+        Button editButton = view.findViewById(R.id.buttonEdit);
+        Button deleteButton = view.findViewById(R.id.buttonDelete);
+
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,17 +113,14 @@ public class RecipeFragment extends Fragment {
             }
         });
 
-        Button deleteButton = view.findViewById(R.id.deleteButton);
-        if (deleteButton != null) {
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // diálogo para asegurar que se quiere eliminar la receta
-                    DialogDelete dialogoDelete = new DialogDelete(recipeId);
-                    dialogoDelete.show(getParentFragmentManager(), "etiqueta5");
-                }
-            });
-        }
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // diálogo para asegurar que se quiere eliminar la receta
+                DialogDelete dialogoDelete = new DialogDelete(recipeId);
+                dialogoDelete.show(getParentFragmentManager(), "etiqueta5");
+            }
+        });
 
         return view;
     }
@@ -167,8 +158,7 @@ public class RecipeFragment extends Fragment {
         }
     }
 
-    public void updateRecipe(int code, String recipeName, String recipeImage, String ingredients,
-                             String steps) {
+    public void updateRecipe(int code, String recipeName, String recipeImage, String ingredients, String steps) {
         this.recipeId = code;
         this.recipeName = recipeName;
         this.recipeIngredients = ingredients;
@@ -180,14 +170,7 @@ public class RecipeFragment extends Fragment {
             if (recipeName != null && ingredients != null && steps != null) {
                 recipeTextView.setText(recipeName);
                 if (recipeImageView != null) {
-                    // ajustar la manera de mostrar la imagen teniendo en cuenta si es la imagen
-                    // predeterminada o una imagen añadida por el usuario y guardada en el
-                    // almacenamiento externo
-                    if (recipeImage.matches("\\d+")) {
-                        recipeImageView.setImageResource(Integer.parseInt(recipeImage));
-                    } else {
-                        recipeImageView.setImageBitmap(BitmapFactory.decodeFile(recipeImage));
-                    }
+                    AppUtils.loadImage(getContext(), recipeImage, recipeImageView);
                 }
                 // guardar la ruta en el tag del título para poder usarla
                 recipeTextView.setTag(recipeImage);
