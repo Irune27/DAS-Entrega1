@@ -108,6 +108,11 @@ public class MenuActivity extends AppCompatActivity {
             exitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // eliminar el user_id de las preferencias
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putInt("user_id", -1);
+                    editor.apply();
+
                     // arrancar una nueva pila de actividades y borrar la anterior
                     Toast.makeText(MenuActivity.this, getString(R.string.logged_out), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(MenuActivity.this, LoginActivity.class);

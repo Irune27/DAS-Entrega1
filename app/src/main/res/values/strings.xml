@@ -48,6 +48,8 @@
     <string name="offline_session">Continuar en modo offline</string>
     <string name="exit">Salir</string>
     <string name="enter_current_password">Introduce tu contraseña actual</string>
+    <string name="recipe_of_the_day">Receta del día</string>
+    <string name="no_recipes_available">No hay recetas disponibles</string>
 
     <string name="fill_all_fields">Es necesario rellenar todos los campos</string>
     <string name="recipe_add_ok">¡La receta se ha añadido correctamente!</string>
@@ -85,8 +87,8 @@
     <string name="map_instructions_title">Instrucciones</string>
     <string name="map_instructions">Pulsando sobre los botones correspondientes,
         aparecerán o desaparecerán los restaurantes, cafeterías y supermercados en un radio de 1km
-        desde tu ubicación. Si mantienes pulsado cualquier otro punto del mapa, se marcarán los
-        lugares cercanos a ese punto.</string>
+        desde tu ubicación. Si mantienes pulsado en cualquier punto del mapa, se marcarán los
+        puntos de interés cercanos a ese punto.</string>
     <string name="map_instructions_positive">Vale</string>
     <string name="passwords_not_match">Los valores introducidos no coinciden</string>
     <string name="connection_error">Error al conectar con el servidor</string>

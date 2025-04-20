@@ -49,6 +49,8 @@
     <string name="offline_session">Jarraitu offline moduan</string>
     <string name="exit">Irten</string>
     <string name="enter_current_password">Sartu egungo pasahitza</string>
+    <string name="recipe_of_the_day">Eguneko errezeta</string>
+    <string name="no_recipes_available">Ez dago errezetarik eskuragarri</string>
 
     <string name="fill_all_fields">Eremu guztiak betetzea beharrezkoa da</string>
     <string name="recipe_add_ok">Errezeta modu egokian gorde da!</string>
@@ -86,8 +88,8 @@ aplikazioak irudi lehenetsia esleituko die errezetei.</string>
     <string name="map_instructions_title">Argibideak</string>
     <string name="map_instructions">Dagokien botoien gainean sakatuz gero, jatetxeak, kafetegiak
         eta supermerkatuak agertuko edo desagertuko dira, zure kokapenetik 1km-ko erradioan.
-        Mapako beste edozein puntu sakatuta mantentzen baduzu, puntu horretatik gertu dauden
-        lekuak markatuko dira.</string>
+        Mapako edozein puntu sakatu eta mantentzen baduzu, puntu horretatik gertu dauden
+        interesguneak markatuko dira.</string>
     <string name="map_instructions_positive">Ados</string>
     <string name="passwords_not_match">Sartutako balioak ez datoz bat</string>
     <string name="connection_error">Errorea zerbitzarira konektatzean</string>
