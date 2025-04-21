@@ -139,6 +139,9 @@ public class MyService extends Service {
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
+                        Intent doneIntent = new Intent(this, MyBroadcastReceiver.class);
+                        doneIntent.setAction("sync_completed");
+                        sendBroadcast(doneIntent);
                         stopSelf();
                     }
                 }, Executors.newSingleThreadExecutor());

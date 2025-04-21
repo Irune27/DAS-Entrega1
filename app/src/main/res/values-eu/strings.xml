@@ -117,4 +117,5 @@ aplikazioak irudi lehenetsia esleituko die errezetei.</string>
     <string name="delete_account_info">Behin ezabatuta, ezingo zara kontu honetara itzuli. Kontuan
         gordeta dituzun errezeta guztiak ezabatuko dira, eta ezingo dituzu berreskuratu. Ekintza
         horrek ez dio offline moduari eragiten.</string>
+    <string name="sync_completed">Deskarga bukatuta!</string>
 </resources>

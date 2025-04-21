@@ -69,6 +69,7 @@
         <receiver
             android:name=".NotificationReceiver"
             android:exported="false" />
+        <receiver android:name=".MyBroadcastReceiver" />
 
         <provider
             android:name=".RecipeProvider"

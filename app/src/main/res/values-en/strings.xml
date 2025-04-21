@@ -118,4 +118,5 @@
     <string name="delete_account_info">Once deleted, you will not be able to access this account again.
         All recipes stored in the account will be deleted, and you will not be able to recover
         them. This action does not affect the offline mode..</string>
+    <string name="sync_completed">Download completed!</string>
 </resources>

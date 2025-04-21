@@ -116,4 +116,5 @@
     <string name="delete_account_info">Una vez eliminada, no podrás volver a acceder a esta cuenta. Se
         borrarán todas las recetas que tuvieras almacenadas en la cuenta, y no podrás recuperarlas.
         Esta acción no afecta al modo offline.</string>
+    <string name="sync_completed">¡Descarga completada!</string>
 </resources>
