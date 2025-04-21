@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -45,6 +46,7 @@ RecyclerViewFragment.recipeListener {
         list = findViewById(R.id.recyclerView);
         Button addButton = findViewById(R.id.buttonAdd);
         Button backButton = findViewById(R.id.buttonBack);
+        Button syncButton = findViewById(R.id.buttonSync);
 
         recipeNames = new ArrayList<>();
         images = new ArrayList<>();
@@ -61,6 +63,23 @@ RecyclerViewFragment.recipeListener {
             }
         });
         backButton.setOnClickListener(v -> finish());
+        if (userId != -1) {
+            syncButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent myService = new Intent(MainActivity.this, MyService.class);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        startForegroundService(myService);
+                    } else {
+                        startService(myService);
+                    }
+                }
+            });
+        }
+        else {
+            syncButton.setEnabled(false);
+            syncButton.setAlpha(0.5f);
+        }
 
         // actualizar las recetas que se muestran con la lista de recetas del servidor
         if (userId != -1) fetchRecipesFromServer(userId);
@@ -132,6 +151,10 @@ RecyclerViewFragment.recipeListener {
 
             adapter.updateData(recipeNames, images, this::onRecipeSelected);
         });
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            showRecipeLandscape();
+        }
     }
 
     private void fetchRecipesFromServer(int userId) {
@@ -147,28 +170,7 @@ RecyclerViewFragment.recipeListener {
             adapter.updateData(recipeNames, images, this::onRecipeSelected);
 
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                TextView labelTextView = findViewById(R.id.textViewContent);
-                Button ingredientsButton = findViewById(R.id.buttonIngredients);
-                Button stepsButton = findViewById(R.id.buttonSteps);
-                Button deleteButton = findViewById(R.id.buttonDelete);
-                Button editButton = findViewById(R.id.buttonEdit);
-                if (selectedRecipePosition == -1) {
-                    // si no hay una receta seleccionada, mostrar los detalles de la primera
-                    if (!recipeNames.isEmpty()) {
-                        onRecipeSelected(0);
-                        adapter.setSelectedPosition(0);
-                    } else {
-                        labelTextView.setVisibility(View.INVISIBLE);
-                        ingredientsButton.setVisibility(View.INVISIBLE);
-                        stepsButton.setVisibility(View.INVISIBLE);
-                        deleteButton.setVisibility(View.INVISIBLE);
-                        editButton.setVisibility(View.INVISIBLE);
-                    }
-                } else {
-                    // si no, mostrar los detalles de la receta seleccionada
-                    onRecipeSelected(selectedRecipePosition);
-                }
-                adapter.notifyDataSetChanged();
+                showRecipeLandscape();
             }
         });
     }
@@ -259,6 +261,31 @@ RecyclerViewFragment.recipeListener {
             i.putExtra("selected_position", recipePos);
             startActivity(i);
         }
+    }
+
+    private void showRecipeLandscape() {
+        TextView labelTextView = findViewById(R.id.textViewContent);
+        Button ingredientsButton = findViewById(R.id.buttonIngredients);
+        Button stepsButton = findViewById(R.id.buttonSteps);
+        Button deleteButton = findViewById(R.id.buttonDelete);
+        Button editButton = findViewById(R.id.buttonEdit);
+        if (selectedRecipePosition == -1) {
+            // si no hay una receta seleccionada, mostrar los detalles de la primera
+            if (!recipeNames.isEmpty()) {
+                onRecipeSelected(0);
+                adapter.setSelectedPosition(0);
+            } else {
+                labelTextView.setVisibility(View.INVISIBLE);
+                ingredientsButton.setVisibility(View.INVISIBLE);
+                stepsButton.setVisibility(View.INVISIBLE);
+                deleteButton.setVisibility(View.INVISIBLE);
+                editButton.setVisibility(View.INVISIBLE);
+            }
+        } else {
+            // si no, mostrar los detalles de la receta seleccionada
+            onRecipeSelected(selectedRecipePosition);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     @Override

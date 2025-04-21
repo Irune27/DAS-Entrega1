@@ -25,6 +25,11 @@ public class LoginActivity extends AppCompatActivity {
         int themeMode = prefs.getInt("theme_mode", AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         AppCompatDelegate.setDefaultNightMode(themeMode);
         AppUtils.setLocale(this);
+
+        // resetear el user_id de las preferencias
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt("user_id", -1);
+        editor.apply();
         setContentView(R.layout.activity_login);
 
         usernameEditText = findViewById(R.id.userEditText);

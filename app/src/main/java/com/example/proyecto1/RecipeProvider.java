@@ -9,8 +9,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.io.File;
 
 public class RecipeProvider extends ContentProvider {
 
@@ -99,11 +103,35 @@ public class RecipeProvider extends ContentProvider {
                       @Nullable String[] selectionArgs) {
 
         SQLiteDatabase db = myDB.getWritableDatabase();
-        // borrar una receta de la tabla
+
         if (uriMatcher.match(uri) == RECIPE_ID) {
+            long recipeId = ContentUris.parseId(uri);
+
+            // obtener la ruta a la imagen local antes de borrar la receta
+            Cursor cursor = db.query("Recetas", new String[]{"Image"}, "Code=?",
+                    new String[]{String.valueOf(recipeId)}, null, null, null);
+
+            String imagePath = null;
+            if (cursor != null && cursor.moveToFirst()) {
+                imagePath = cursor.getString(cursor.getColumnIndexOrThrow("Image"));
+                cursor.close();
+            }
+
+            // borrar la receta
             selection = "Code=?";
-            selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-            return db.delete("Recetas", selection, selectionArgs);
+            selectionArgs = new String[]{String.valueOf(recipeId)};
+            int rowsDeleted = db.delete("Recetas", selection, selectionArgs);
+
+            // borrar la imagen local si existe
+            if (imagePath != null && !imagePath.isEmpty()) {
+                File imageFile = new File(imagePath);
+                if (imageFile.exists()) {
+                    boolean deleted = imageFile.delete();
+                    Log.d("RecipeProvider", "Image deleted: " + deleted + " -> " + imagePath);
+                }
+            }
+
+            return rowsDeleted;
         }
         throw new IllegalArgumentException("Invalid URI for delete: " + uri);
     }

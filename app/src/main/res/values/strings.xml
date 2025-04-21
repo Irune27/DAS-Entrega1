@@ -46,10 +46,11 @@
         sin registrarte o iniciar sesión. Las recetas se guardarán de manera local, en tu
         dispositivo.</string>
     <string name="offline_session">Continuar en modo offline</string>
-    <string name="exit">Salir</string>
     <string name="enter_current_password">Introduce tu contraseña actual</string>
     <string name="recipe_of_the_day">Receta del día</string>
     <string name="no_recipes_available">No hay recetas disponibles</string>
+    <string name="synchronize">Descargar recetas al local</string>
+    <string name="delete_account">Borrar cuenta</string>
 
     <string name="fill_all_fields">Es necesario rellenar todos los campos</string>
     <string name="recipe_add_ok">¡La receta se ha añadido correctamente!</string>
@@ -108,4 +109,11 @@
     <string name="incorrect_password">Contraseña incorrecta</string>
     <string name="password_change_ok">¡Contraseña actualizada!</string>
     <string name="password_change_error">Error al cambiar la contraseña</string>
+    <string name="synchronizing">Descargando las recetas...</string>
+    <string name="account_delete_ok">La cuenta se ha borrado correctamente</string>
+    <string name="account_delete_error">Error al borrar la cuenta</string>
+    <string name="delete_account_title">¿Seguro que quieres borrar tu cuenta?</string>
+    <string name="delete_account_info">Una vez eliminada, no podrás volver a acceder a esta cuenta. Se
+        borrarán todas las recetas que tuvieras almacenadas en la cuenta, y no podrás recuperarlas.
+        Esta acción no afecta al modo offline.</string>
 </resources>

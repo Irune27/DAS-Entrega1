@@ -47,10 +47,11 @@
         erregistratu edo saioa hasi gabe. Errezetak modu lokalean gordeko dira, zure
         gailuan.</string>
     <string name="offline_session">Jarraitu offline moduan</string>
-    <string name="exit">Irten</string>
     <string name="enter_current_password">Sartu egungo pasahitza</string>
     <string name="recipe_of_the_day">Eguneko errezeta</string>
     <string name="no_recipes_available">Ez dago errezetarik eskuragarri</string>
+    <string name="synchronize">Errezetak lokalera deskargatu</string>
+    <string name="delete_account">Kontua ezabatu</string>
 
     <string name="fill_all_fields">Eremu guztiak betetzea beharrezkoa da</string>
     <string name="recipe_add_ok">Errezeta modu egokian gorde da!</string>
@@ -109,4 +110,11 @@ aplikazioak irudi lehenetsia esleituko die errezetei.</string>
     <string name="incorrect_password">Pasahitz okerra</string>
     <string name="password_change_ok">Pasahitza eguneratu da!</string>
     <string name="password_change_error">Errorea pasahitza aldatzean</string>
+    <string name="synchronizing">Errezetak deskargatzen...</string>
+    <string name="account_delete_ok">Kontua behar bezala ezabatu da</string>
+    <string name="account_delete_error">Errorea kontua ezabatzean</string>
+    <string name="delete_account_title">Ziur zaude kontu hau ezabatu nahi duzula?</string>
+    <string name="delete_account_info">Behin ezabatuta, ezingo zara kontu honetara itzuli. Kontuan
+        gordeta dituzun errezeta guztiak ezabatuko dira, eta ezingo dituzu berreskuratu. Ekintza
+        horrek ez dio offline moduari eragiten.</string>
 </resources>

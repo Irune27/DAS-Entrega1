@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.85"
-        app:layout_constraintHeight_percent="0.85" >
+        app:layout_constraintHeight_percent="0.9" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,52 +24,88 @@
 
             <Button
                 android:id="@+id/buttonDelete"
-                android:layout_width="65dp"
+                android:layout_width="60dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:backgroundTint="@color/myError"
                 android:insetTop="4dp"
                 app:icon="@drawable/delete"
                 app:iconPadding="0dp"
-                app:iconSize="18dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonEdit" />
+                app:iconSize="16dp"
+                app:layout_constraintEnd_toStartOf="@+id/view"
+                app:layout_constraintTop_toBottomOf="@+id/buttonSteps" />
 
             <Button
                 android:id="@+id/buttonEdit"
                 style="@style/ButtonStyle"
-                android:layout_width="65dp"
+                android:layout_width="60dp"
                 android:layout_height="48dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
                 app:icon="@drawable/pencil"
                 app:iconPadding="0dp"
-                app:iconSize="22dp"
+                app:iconSize="16dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonSteps" />
 
             <Button
                 android:id="@+id/buttonIngredients"
-                style="@style/ButtonStyle"
-                android:layout_width="wrap_content"
+                style="@style/SmallButtonStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/ingredients"
+                app:layout_constraintEnd_toStartOf="@+id/view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/buttonSteps"
-                style="@style/ButtonStyle"
-                android:layout_width="wrap_content"
+                style="@style/SmallButtonStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/steps"
+                app:layout_constraintEnd_toStartOf="@+id/view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buttonIngredients" />
+
+            <Button
+                android:id="@+id/buttonBack"
+                style="@style/SmallButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/back"
+                app:layout_constraintEnd_toStartOf="@+id/view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonDelete" />
+
+            <Button
+                android:id="@+id/buttonSync"
+                style="@style/SmallButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/synchronize"
+                app:layout_constraintEnd_toStartOf="@id/view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/buttonBack" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginVertical="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textViewContent"
@@ -78,8 +114,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="55dp"
                 android:layout_marginTop="25dp"
-                android:text="@string/steps"
-                app:layout_constraintStart_toEndOf="@id/buttonIngredients"
+                android:text="@string/ingredients"
+                app:layout_constraintStart_toEndOf="@id/view"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ScrollView
@@ -92,7 +128,7 @@
                 android:layout_marginBottom="30dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/buttonIngredients"
+                app:layout_constraintStart_toEndOf="@+id/view"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
@@ -102,17 +138,6 @@
                     android:layout_height="wrap_content"
                     android:padding="16dp" />
             </ScrollView>
-
-            <Button
-                android:id="@+id/buttonBack"
-                style="@style/ButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/back"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonDelete" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 

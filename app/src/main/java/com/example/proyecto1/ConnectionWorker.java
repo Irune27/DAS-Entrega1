@@ -54,7 +54,8 @@ public class ConnectionWorker extends Worker {
                 }
                 case "get_user_info":
                 case "get_recipe_names":
-                case "get_recipes": {
+                case "get_recipes":
+                case "delete_user": {
                     int userId = inputData.getInt("user_id", -1);
                     jsonParam.put("user_id", userId);
                     break;

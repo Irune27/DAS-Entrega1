@@ -47,10 +47,11 @@
         mode, without registering or logging in. The recipes will be saved locally, on your
         device.</string>
     <string name="offline_session">Continue in offline mode</string>
-    <string name="exit">Exit</string>
     <string name="enter_current_password">Enter your current password</string>
     <string name="recipe_of_the_day">Recipe of the day</string>
     <string name="no_recipes_available">No recipes available</string>
+    <string name="synchronize">Download recipes to local</string>
+    <string name="delete_account">Delete account</string>
 
     <string name="fill_all_fields">All fields must be filled</string>
     <string name="recipe_add_ok">The recipe has been saved successfully!</string>
@@ -110,4 +111,11 @@
     <string name="incorrect_password">Incorrect password</string>
     <string name="password_change_ok">Password updated!</string>
     <string name="password_change_error">Error when changing the password</string>
+    <string name="synchronizing">Downloading recipes...</string>
+    <string name="account_delete_ok">The account has been deleted</string>
+    <string name="account_delete_error">Error when deleting the account</string>
+    <string name="delete_account_title">Are you sure you want to delete your account?</string>
+    <string name="delete_account_info">Once deleted, you will not be able to access this account again.
+        All recipes stored in the account will be deleted, and you will not be able to recover
+        them. This action does not affect the offline mode..</string>
 </resources>
