@@ -10,6 +10,8 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
@@ -326,6 +328,27 @@ public class AppUtils {
             imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
         } else {
             imageView.setImageResource(R.drawable.default_image);
+        }
+    }
+
+    public static Drawable getMarkerColor(Context context, String type) {
+        switch (type) {
+            case "restaurant":
+                Drawable icon1 = ContextCompat.getDrawable(context, R.drawable.silverware_variant).mutate();
+                icon1.setTint(Color.RED);
+                return icon1;
+            case "cafe":
+                Drawable icon2 = ContextCompat.getDrawable(context, R.drawable.coffee).mutate();
+                icon2.setTint(Color.BLUE);
+                return icon2;
+            case "supermarket":
+                Drawable icon3 = ContextCompat.getDrawable(context, R.drawable.cart).mutate();
+                icon3.setTint(Color.BLACK);
+                return icon3;
+            default:
+                Drawable icon4 = ContextCompat.getDrawable(context, R.drawable.star).mutate();
+                icon4.setTint(Color.YELLOW);
+                return icon4;
         }
     }
 

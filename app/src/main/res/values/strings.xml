@@ -24,6 +24,7 @@
     <string name="basque">Euskera</string>
     <string name="starting_point">Escuela de Ingeniería de Bilbao</string>
     <string name="unnamed">Sin nombre</string>
+    <string name="selected_point">Punto seleccionado</string>
     <string name="restaurants">Restaurantes</string>
     <string name="cafes">Cafeterías</string>
     <string name="supermarkets">Supermercados</string>
@@ -74,14 +75,14 @@
     <string name="notification_message">¡Chef! ¿Ya has pensado qué vas a comer mañana?</string>
     <string name="notification_subtext">Recordatorio</string>
     <string name="location_not_available">Ubicación no disponible</string>
-    <string name="online">Estás online!</string>
-    <string name="offline">Estás offline</string>
+    <string name="online">Hay conexión</string>
+    <string name="offline">Sin conexión</string>
     <string name="map_title">¿Permitir acceso a la ubicación?</string>
     <string name="map_message">Sin permiso para acceder a la ubicación de tu dispositivo, no se
         podrán marcar los restaurantes, las cafeterías y los supermercados en el mapa.</string>
     <string name="map_positive">Dar acceso a la ubicación</string>
     <string name="map_neutral">Continuar sin ubicación</string>
-    <string name="offline_not_load">Estás offline, no se pueden marcar los lugares cercanos</string>
+    <string name="offline_not_load">Sin conexión no se pueden marcar los lugares cercanos</string>
     <string name="fetch_error">Error al buscar los lugares cercanos</string>
     <string name="loading_from_point">Cargando lugares cercanos…</string>
     <string name="location_not_found">No se ha encontrado ninguna ubicación</string>

@@ -46,8 +46,6 @@ public class RecipeWidget extends AppWidgetProvider {
 
                 views.setTextViewText(R.id.widgetRecipeName, name);
 
-                // todo cuando se hace la sincronización, está pillando la imagen del servidor,
-                // igual que en el MainActivity
                 if (image.matches("\\d+")) {
                     int resId = Integer.parseInt(image);
                     views.setImageViewResource(R.id.widgetImage, resId);

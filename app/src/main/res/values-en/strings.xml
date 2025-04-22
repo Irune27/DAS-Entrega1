@@ -25,6 +25,7 @@
     <string name="basque">Basque</string>
     <string name="starting_point">Bilbao School of Engineering</string>
     <string name="unnamed">Unnamed</string>
+    <string name="selected_point">Selected point</string>
     <string name="restaurants">Restaurants</string>
     <string name="cafes">Cafes</string>
     <string name="supermarkets">Supermarkets</string>
@@ -76,14 +77,14 @@
         tomorrow?</string>
     <string name="notification_subtext">Reminder</string>
     <string name="location_not_available">Location not available</string>
-    <string name="online">You are online!</string>
-    <string name="offline">You are offline</string>
+    <string name="online">Connection available</string>
+    <string name="offline">No connection</string>
     <string name="map_title">Allow location access?</string>
     <string name="map_message">Without permission to access the device\'s location, the application
         won\'t be able to mark the restaurants, cafes and supermarkets on the map.</string>
     <string name="map_positive">Give location access</string>
     <string name="map_neutral">Continue without location</string>
-    <string name="offline_not_load">You are offline, can\'t load nearby places</string>
+    <string name="offline_not_load">No network connection, can\'t load nearby places</string>
     <string name="fetch_error">Error fetching nearby places</string>
     <string name="loading_from_point">Loading nearby places…</string>
     <string name="location_not_found">Location not found</string>

@@ -25,6 +25,7 @@
     <string name="basque">Euskara</string>
     <string name="starting_point">Bilboko Ingeniaritza Eskola</string>
     <string name="unnamed">Izengabea</string>
+    <string name="selected_point">Hautatutako puntua</string>
     <string name="restaurants">Jatetxeak</string>
     <string name="cafes">Kafetegiak</string>
     <string name="supermarkets">Supermerkatuak</string>
@@ -75,14 +76,14 @@ aplikazioak irudi lehenetsia esleituko die errezetei.</string>
     <string name="notification_message">Chef! Pentsatu duzu zer jango duzun bihar?</string>
     <string name="notification_subtext">Gogorarazpena</string>
     <string name="location_not_available">Kokapena ez dago eskuragarri</string>
-    <string name="online">Online zaude!</string>
-    <string name="offline">Offline zaude</string>
+    <string name="online">Konexioa dago</string>
+    <string name="offline">Ez dago konexiorik</string>
     <string name="map_title">Kokapena erabiltzen utzi?</string>
     <string name="map_message">Zure gailuaren kokapena eskuragarri ez badago, aplikazioak ezin
         izango ditu jatetxeak, kafetegiak eta supermerkatuak mapan markatu.</string>
     <string name="map_positive">Kokapena eskuragarri jarri</string>
     <string name="map_neutral">Kokapenik gabe jarraitu</string>
-    <string name="offline_not_load">Offline zaude, ezin dira gertu dauden lekuak markatu</string>
+    <string name="offline_not_load">Konexiorik gabe ezin dira gertu dauden lekuak markatu</string>
     <string name="fetch_error">Errorea gertu dauden lekuak bilatzean</string>
     <string name="loading_from_point">Gertu dauden lekuak kargatzen…</string>
     <string name="location_not_found">Ez da kokapenik aurkitu</string>

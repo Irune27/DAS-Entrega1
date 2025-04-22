@@ -364,7 +364,7 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
                             m.setPosition(new GeoPoint(eLat, eLon));
                             m.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                             m.setTitle(name.isEmpty() ? getString(R.string.unnamed) : name);
-                            m.setIcon(getMarkerColor(type));
+                            m.setIcon(AppUtils.getMarkerColor(this, type));
                             map.getOverlays().add(m);
 
                             if (type.equals("restaurant")) restaurantMarkers.add(m);
@@ -384,27 +384,6 @@ public class MapActivity extends AppCompatActivity implements MyMapEventsReceive
                 );
             }
         }).start();
-    }
-
-    private Drawable getMarkerColor(String type) {
-        switch (type) {
-            case "restaurant":
-                Drawable icon1 = ContextCompat.getDrawable(this, R.drawable.silverware_variant).mutate();
-                icon1.setTint(Color.RED);
-                return icon1;
-            case "cafe":
-                Drawable icon2 = ContextCompat.getDrawable(this, R.drawable.coffee).mutate();
-                icon2.setTint(Color.BLUE);
-                return icon2;
-            case "supermarket":
-                Drawable icon3 = ContextCompat.getDrawable(this, R.drawable.cart).mutate();
-                icon3.setTint(Color.GREEN);
-                return icon3;
-            default:
-                Drawable icon4 = ContextCompat.getDrawable(this, R.drawable.cart).mutate();
-                icon4.setTint(Color.YELLOW);
-                return icon4;
-        }
     }
 
     @Override
