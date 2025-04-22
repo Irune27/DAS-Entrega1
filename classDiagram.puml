@@ -1,0 +1,467 @@
+@startuml
+class DialogCameraInfo {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class MyBroadcastReceiver {
++ onReceive(context: Context, intent: Intent)
+}
+
+class RecipeProvider {
++ {static} AUTHORITY: String
++ {static} RECIPE_PATH: String
++ {static} CONTENT_URI: Uri
+- {static} RECIPES: int
+- {static} RECIPE_ID: int
+- {static} uriMatcher: UriMatcher
+- myDB: MyDB
++ onCreate(): boolean
++ query(uri: Uri, projection: String[], selection: String, selectionArgs: String[], sortOrder: String): Cursor
++ getType(uri: Uri): String
++ insert(uri: Uri, values: ContentValues): Uri
++ delete(uri: Uri, selection: String, selectionArgs: String[]): int
++ update(uri: Uri, values: ContentValues, selection: String, selectionArgs: String[]): int
+}
+
+
+class DialogGalleryInfo {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class MainActivity {
+- list: RecyclerView
+- adapter: MyAdapter
+- recipeNames: ArrayList<String>
+- images: ArrayList<String>
+- selectedRecipePosition: int
+- code: int
+- recipeName: String
+# onCreate(savedInstanceState: Bundle)
+# onResume()
+# onNewIntent(intent: Intent)
+- loadRecipes()
+- fetchRecipesFromServer(userId: int)
++ onRecipeSelected(recipePos: int)
+- showRecipe(recipePos: int)
+- showRecipeLandscape()
+# onDestroy()
+}
+
+
+class DialogDelete {
+- recipeId: int
++ <<Create>> DialogDelete(recipeId: int)
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+
+class MyAdapter {
+- context: Context
+- names: ArrayList<String>
+- listener: OnRecipeClickListener
+- selectedPosition: int
++ <<Create>> MyAdapter(context: Context, n: ArrayList<String>, i: ArrayList<String>, listener: OnRecipeClickListener)
++ updateData(newNames: ArrayList<String>, newImages: ArrayList<String>, listener: OnRecipeClickListener)
++ setSelectedPosition(position: int)
++ onCreateViewHolder(parent: ViewGroup, viewType: int): MyViewHolder
++ onBindViewHolder(holder: MyViewHolder,position: int)
++ getItemCount(): int
+}
+
+
+interface MyAdapter$OnRecipeClickListener {
+~ onRecipeSelected(position: int)
+}
+
+class NetworkChangeReceiver {
+- listener:NetworkListener
++ <<Create>> NetworkChangeReceiver(listener: NetworkListener)
++ onReceive(context: Context, intent: Intent)
+}
+
+
+interface NetworkChangeReceiver$NetworkListener {
+~ onNetworkAvailable()
+~ onNetworkLost()
+}
+
+class AppUtils {
++ {static} loadRecipesFromLocal(context: Context, listener: OnRecipesLoadedListener)
++ {static} fetchRecipesFromServer(context: Context, lifecycleOwner: LifecycleOwner, userId: int, listener: OnRecipesLoadedListener)
++ {static} isMediaStorageAvailable(context: Context): boolean
++ {static} scaleBitmap(bitmap: Bitmap, maxWidth: int, maxHeight: int): Bitmap
++ {static} saveImageToExternalStorage(context: Context, bitmap: Bitmap, filenamePrefix: String): String
++ {static} checkImagePermission(activity: Activity, callback: PermissionCallback)
++ {static} checkCameraPermission(activity: Activity, callback: PermissionCallback)
++ {static} uploadImageToServer(imagePath: String, urlServer: String, textParams: Map<String,String>, fileFieldName: String, fileName: String, callback: UploadCallback)
++ {static} loadImage(context: Context, imagePath: String, imageView: ImageView)
++ {static} getMarkerColor(context: Context, type: String): Drawable
++ {static} setLocale(context: Context)
++ {static} setLocale(context: Context, languageCode: String)
+}
+
+interface AppUtils$OnRecipesLoadedListener {
+~ onRecipesLoaded(names: ArrayList<String>, images: ArrayList<String>)
+}
+
+interface AppUtils$PermissionCallback {
+~ onPermissionGranted()
+~ onPermissionDenied()
+~ showRationaleDialog()
+}
+
+interface AppUtils$UploadCallback {
+~ onSuccess(serverResponse: String)
+~ onError(e: Exception)
+}
+
+class SettingsActivity {
+# onCreate(savedInstanceState: Bundle)
+}
+
+class ShowRecipeActivity {
+# onCreate(savedInstanceState: Bundle)
++ onConfigurationChanged(newConfig: Configuration)
++ onRecipeSelected(pos: int)
+}
+
+class ProfileActivity {
+- userImageView: ImageView
+- imagePath: String
+- currentPasswordEditText: EditText
+- newPasswordSection: LinearLayout
+- userId: int
+# pickImageLauncher: ActivityResultLauncher<Intent>
+- takePictureLauncher: ActivityResultLauncher<Intent>
+# onCreate(savedInstanceState: Bundle)
+- showOptionsDialog()
+# openImageChooser()
+# openCamera()
++ uploadImageToServer(imagePath: String, userId: int)
+- verifyCurrentPassword()
+- changePassword()
++ onRequestPermissionsResult(requestCode: int, permissions: String[], grantResults: int[])
+}
+
+
+class RecyclerViewFragment {
+- list: RecyclerView
+- adapter: MyAdapter
+- recipeNames: ArrayList<String>
+- listener: recipeListener
++ <<Create>> RecyclerViewFragment()
++ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View
++ onViewCreated(view: View, savedInstanceState: Bundle)
++ onAttach(context: Context)
+- loadRecipes()
+- fetchRecipesFromServer(userId: int)
++ onDestroy()
+}
+
+
+interface RecyclerViewFragment$recipeListener {
+~ onRecipeSelected(pos: int)
+}
+
+class RecipeFragment {
+- recipeImageView: ImageView
+- recipeTextView: TextView
+- recipeName: String
+- recipeId: int
+- listener: recipeListener
+- editRecipeLauncher: ActivityResultLauncher<Intent>
++ <<Create>> RecipeFragment()
++ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View
++ onViewCreated(view: View, savedInstanceState: Bundle)
++ onAttach(context: Context)
++ updateRecipe(code: int, recipeName: String, recipeImage: String, ingredients: String, steps: String)
+}
+
+
+interface RecipeFragment$recipeListener {
+~ onRecipeSelected(pos: int)
+}
+
+class MyViewHolder {
++ text: TextView
++ image: ImageView
+~ relativeLayout: RelativeLayout
++ listener: RecipeFragment.recipeListener
++ <<Create>> MyViewHolder(itemView: View)
++ onRecipeSelected(pos: int)
+}
+
+
+class EditRecipeActivity {
+- nameInput: EditText
+- recipeId: int
+# onCreate(savedInstanceState: Bundle)
+# onSaveInstanceState(outState: Bundle)
+# onRestoreInstanceState(savedInstanceState: Bundle)
+- updateRecipe()
+- updateRecipeOnServer()
+- updateRecipeInServer(name: String, serverImagePath: String, ingredients: String, steps: String)
+}
+
+
+class BaseRecipeActivity {
+# recipeImage: ImageView
+# imageUri: Uri
+# imagePath: String
+# imagePathOnServer: String
+# pickImageLauncher: ActivityResultLauncher<Intent>
+# takePictureLauncher: ActivityResultLauncher<Intent>
+# openImageChooser()
+# openCamera()
++ uploadImageToServer(image: String, listener: OnImageUploadListener)
++ onRequestPermissionsResult(requestCode: int, permissions: String[], grantResults: int[])
+}
+
+
+interface BaseRecipeActivity$OnImageUploadListener {
+~ onImageUploaded(imagePathOnServer: String)
+}
+
+class NotificationReceiver {
++ onReceive(context: Context, intent: Intent)
+}
+
+class MyDB {
+- {static} DATABASE_NAME: String
+- {static} DATABASE_VERSION: int
+- {static} instance: MyDB
+- database: SQLiteDatabase
+- <<Create>> MyDB(context: Context)
++ {static} getInstance(context: Context): MyDB
++ onCreate(sqLiteDatabase: SQLiteDatabase)
++ onUpgrade(db: SQLiteDatabase, oldVersion: int, newVersion: int)
++ getAllRecipes(): Cursor
++ getRecipeNamesAndImages(): Cursor
++ addRecipe(name: String, imagePath: String, ingredients: String, steps: String): long
++ updateRecipe(recipeId: int, name: String, imagePath: String, ingredients: String, steps: String): long
++ deleteRecipe(recipeId: int): int
++ closeDatabase()
+}
+
+
+class DialogGallery {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class RecipeWidget {
++ onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: int[])
+}
+
+class DialogCamera {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class RegisterActivity {
+- userEditText: EditText
+# onCreate(savedInstanceState: Bundle)
+}
+
+
+class MyMapEventsReceiver {
+- context: Context
+- map: MapView
+- markerManager: MarkerManager
+- pressedPointMarker: Marker
++ <<Create>> MyMapEventsReceiver(context: Context, map: MapView, markerManager: MarkerManager)
++ singleTapConfirmedHelper(p: GeoPoint): boolean
++ longPressHelper(p: GeoPoint): boolean
+}
+
+
+interface MyMapEventsReceiver$MarkerManager {
+~ clearAllPlaceMarkers()
+~ loadPlacesFromPoint(point: GeoPoint)
+}
+
+class DialogDeleteUser {
+- userId: int
++ <<Create>> DialogDeleteUser(userId: int)
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+
+class MapActivity {
+- map: MapView
+- locationOverlay: MyLocationNewOverlay
+- defaultPoint: GeoPoint
+- restaurantMarkers: List<Marker>
+- cafeMarkers: List<Marker>
+- marketMarkers: List<Marker>
+- networkChangeReceiver: NetworkChangeReceiver
+- hasAlreadyLoadedPlaces: boolean
+- showRestaurants: boolean
+- showCafes: boolean
+- showMarkets: boolean
+- locationAttempts: int
+# onCreate(savedInstanceState: Bundle)
+# onResume()
+# onPause()
+- updateMarkers()
+- checkLocationPermission()
+- setupUserLocation()
+- getLastBestLocation(): Location
+- isOnline(): boolean
+- getBoundingBox(center: GeoPoint, rangeMeters: double): BoundingBox
+- loadNearbyPlaces(location: GeoPoint, type: String)
++ onRequestPermissionsResult(requestCode: int, permissions: String[], grantResults: int[])
++ loadPlacesFromPoint(p: GeoPoint)
++ clearAllPlaceMarkers()
+}
+
+
+class DialogMapInfo {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class LoginActivity {
+- usernameEditText: EditText
+# onCreate(savedInstanceState: Bundle)
+}
+
+
+class ConnectionWorker {
++ <<Create>> ConnectionWorker(context: Context, params: WorkerParameters)
++ doWork(): Result
+}
+
+class MenuActivity {
+- username: String
+- profileButton: Button
+- userImageView: ImageView
+- userText: TextView
+# onCreate(savedInstanceState: Bundle)
+# onResume()
+- createNotificationChannel()
+- scheduleDailyNotification()
+- loadUserData(userId: int)
+}
+
+
+class AddRecipeActivity {
+- nameInput: EditText
+# onCreate(savedInstanceState: Bundle)
+# onSaveInstanceState(outState: Bundle)
+# onRestoreInstanceState(savedInstanceState: Bundle)
+- saveRecipe()
+- saveRecipeToServer(userId: int)
+}
+
+
+class MyService {
++ onCreate()
+- synchronizeRecipes()
+- {static} downloadImage(imageUrl: String): Bitmap
++ onBind(intent: Intent): IBinder
+}
+
+class DialogMap {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+
+AppUtils +.. AppUtils$OnRecipesLoadedListener
+AppUtils +.. AppUtils$PermissionCallback
+AppUtils +.. AppUtils$UploadCallback
+AppUtils ..> RecipeProvider
+AppUtils ..> ConnectionWorker
+
+BaseRecipeActivity <|-- EditRecipeActivity
+BaseRecipeActivity +.. BaseRecipeActivity$OnImageUploadListener
+BaseRecipeActivity <|-- AddRecipeActivity
+BaseRecipeActivity ..> DialogCamera
+BaseRecipeActivity ..> DialogCameraInfo
+BaseRecipeActivity ..> DialogGallery
+BaseRecipeActivity ..> DialogGalleryInfo
+BaseRecipeActivity ..> AppUtils
+AddRecipeActivity ..> RecipeProvider
+EditRecipeActivity ..> RecipeProvider
+EditRecipeActivity ..> ConnectionWorker
+
+DialogDelete ..> RecipeProvider
+DialogDelete ..> ConnectionWorker
+
+DialogDeleteUser ..> ConnectionWorker
+
+LoginActivity ..> AppUtils
+LoginActivity ..> ConnectionWorker
+LoginActivity ..> RegisterActivity
+LoginActivity ..> MenuActivity
+
+MainActivity ..|> RecyclerViewFragment$recipeListener
+MainActivity ..|> RecipeFragment$recipeListener
+MainActivity ..> RecipeFragment
+MainActivity ..> AddRecipeActivity
+MainActivity o-- MyAdapter
+MainActivity ..> ShowRecipeActivity
+MainActivity ..> RecipeProvider
+MainActivity ..> AppUtils
+MainActivity ..> MyService
+
+MapActivity --> NetworkChangeReceiver
+MapActivity ..> AppUtils
+MapActivity --> MyMapEventsReceiver
+MapActivity ..> DialogMap
+MapActivity ..> DialogMapInfo
+
+MenuActivity ..> AppUtils
+MenuActivity ..> MainActivity
+MenuActivity ..> MapActivity
+MenuActivity ..> SettingsActivity
+MenuActivity ..> ProfileActivity
+MenuActivity ..> LoginActivity
+MenuActivity ..> NotificationReceiver
+MenuActivity ..> ConnectionWorker
+
+MyAdapter +.. MyAdapter$OnRecipeClickListener
+MyAdapter --> MyViewHolder
+
+MyMapEventsReceiver +.. MyMapEventsReceiver$MarkerManager
+
+MyService ..> ConnectionWorker
+MyService ..> RecipeProvider
+MyService ..> MyBroadcastReceiver
+
+RecipeFragment$recipeListener <|.. MyViewHolder
+
+NetworkChangeReceiver +.. NetworkChangeReceiver$NetworkListener
+
+NotificationReceiver ..> MenuActivity
+
+ProfileActivity ..> AppUtils
+ProfileActivity ..> DialogDeleteUser
+ProfileActivity ..> DialogCamera
+ProfileActivity ..> DialogCameraInfo
+ProfileActivity ..> DialogGallery
+ProfileActivity ..> DialogGalleryInfo
+ProfileActivity ..> ConnectionWorker
+
+RecipeFragment +.. RecipeFragment$recipeListener
+RecipeFragment ..> EditRecipeActivity
+RecipeFragment ..> DialogDelete
+
+RecipeProvider --> MyDB
+
+RecipeWidget ..> AppUtils
+RecipeWidget ..> RecipeProvider
+RecipeWidget ..> LoginActivity
+
+RecyclerViewFragment +.. RecyclerViewFragment$recipeListener
+RecyclerViewFragment o-- MyAdapter
+RecyclerViewFragment ..> RecipeProvider
+RecyclerViewFragment ..> AppUtils
+
+RegisterActivity ..> AppUtils
+RegisterActivity ..> ConnectionWorker
+RegisterActivity ..> LoginActivity
+
+SettingsActivity ..> MenuActivity
+SettingsActivity ..> AppUtils
+
+RecipeFragment$recipeListener <|.. ShowRecipeActivity
+ShowRecipeActivity ..> RecipeFragment 
+@enduml
