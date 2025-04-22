@@ -1,0 +1,49 @@
+@startuml
+class ProfileActivity {
+- userImageView: ImageView
+- imagePath: String
+- currentPasswordEditText: EditText
+- newPasswordSection: LinearLayout
+- userId: int
+# pickImageLauncher: ActivityResultLauncher<Intent>
+- takePictureLauncher: ActivityResultLauncher<Intent>
+# onCreate(savedInstanceState: Bundle)
+- showOptionsDialog()
+# openImageChooser()
+# openCamera()
++ uploadImageToServer(imagePath: String, userId: int)
+- verifyCurrentPassword()
+- changePassword()
++ onRequestPermissionsResult(requestCode: int, permissions: String[], grantResults: int[])
+}
+
+class DialogDeleteUser {
+- userId: int
++ <<Create>> DialogDeleteUser(userId: int)
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class DialogCamera {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class DialogGallery {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class DialogCameraInfo {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class DialogGalleryInfo {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+ProfileActivity ..> AppUtils
+ProfileActivity ..> DialogDeleteUser
+ProfileActivity ..> DialogCamera
+ProfileActivity ..> DialogCameraInfo
+ProfileActivity ..> DialogGallery
+ProfileActivity ..> DialogGalleryInfo
+ProfileActivity ..> ConnectionWorker
+@enduml

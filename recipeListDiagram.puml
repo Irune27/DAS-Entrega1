@@ -1,0 +1,109 @@
+@startuml
+class MainActivity {
+- list: RecyclerView
+- adapter: MyAdapter
+- recipeNames: ArrayList<String>
+- images: ArrayList<String>
+- selectedRecipePosition: int
+- code: int
+- recipeName: String
+# onCreate(savedInstanceState: Bundle)
+# onResume()
+# onNewIntent(intent: Intent)
+- loadRecipes()
+- fetchRecipesFromServer(userId: int)
++ onRecipeSelected(recipePos: int)
+- showRecipe(recipePos: int)
+- showRecipeLandscape()
+# onDestroy()
+}
+
+class RecyclerViewFragment {
+- list: RecyclerView
+- adapter: MyAdapter
+- recipeNames: ArrayList<String>
+- listener: recipeListener
++ <<Create>> RecyclerViewFragment()
++ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View
++ onViewCreated(view: View, savedInstanceState: Bundle)
++ onAttach(context: Context)
+- loadRecipes()
+- fetchRecipesFromServer(userId: int)
++ onDestroy()
+}
+
+interface RecyclerViewFragment$recipeListener {
+~ onRecipeSelected(pos: int)
+}
+
+class RecipeFragment {
+- recipeImageView: ImageView
+- recipeTextView: TextView
+- recipeName: String
+- recipeId: int
+- listener: recipeListener
+- editRecipeLauncher: ActivityResultLauncher<Intent>
++ <<Create>> RecipeFragment()
++ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View
++ onViewCreated(view: View, savedInstanceState: Bundle)
++ onAttach(context: Context)
++ updateRecipe(code: int, recipeName: String, recipeImage: String, ingredients: String, steps: String)
+}
+
+interface RecipeFragment$recipeListener {
+~ onRecipeSelected(pos: int)
+}
+
+class MyAdapter {
+- context: Context
+- names: ArrayList<String>
+- listener: OnRecipeClickListener
+- selectedPosition: int
++ <<Create>> MyAdapter(context: Context, n: ArrayList<String>, i: ArrayList<String>, listener: OnRecipeClickListener)
++ updateData(newNames: ArrayList<String>, newImages: ArrayList<String>, listener: OnRecipeClickListener)
++ setSelectedPosition(position: int)
++ onCreateViewHolder(parent: ViewGroup, viewType: int): MyViewHolder
++ onBindViewHolder(holder: MyViewHolder,position: int)
++ getItemCount(): int
+}
+
+interface MyAdapter$OnRecipeClickListener {
+~ onRecipeSelected(position: int)
+}
+
+class MyViewHolder {
++ text: TextView
++ image: ImageView
+~ relativeLayout: RelativeLayout
++ listener: RecipeFragment.recipeListener
++ <<Create>> MyViewHolder(itemView: View)
++ onRecipeSelected(pos: int)
+}
+
+class ShowRecipeActivity {
+# onCreate(savedInstanceState: Bundle)
++ onConfigurationChanged(newConfig: Configuration)
++ onRecipeSelected(pos: int)
+}
+
+MainActivity ..|> RecyclerViewFragment$recipeListener
+MainActivity ..|> RecipeFragment$recipeListener
+MainActivity ..> RecipeFragment
+MainActivity ..> ShowRecipeActivity
+MainActivity o-- MyAdapter
+
+RecyclerViewFragment +.. RecyclerViewFragment$recipeListener
+RecyclerViewFragment o-- MyAdapter
+RecyclerViewFragment ..> RecipeFragment
+
+RecipeFragment +.. RecipeFragment$recipeListener
+RecipeFragment ..> MyAdapter
+RecipeFragment ..> ShowRecipeActivity
+RecipeFragment ..> EditRecipeActivity
+
+MyAdapter +.. MyAdapter$OnRecipeClickListener
+MyAdapter --> MyViewHolder
+
+RecipeFragment$recipeListener <|.. MyViewHolder
+RecipeFragment$recipeListener <|.. ShowRecipeActivity
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+actor User
+
+participant "RecipeFragment" as Fragment
+participant "EditRecipeActivity" as EditActivity
+participant "RecipeProvider" as Provider
+participant "Servidor" as Server
+participant "ConnectionWorker" as Worker
+participant "BaseRecipeActivity" as Base
+
+== Inicio ==
+User -> Fragment: onClick(v)
+Fragment -> EditActivity: startActivityForResult(intent)
+
+User -> EditActivity: onClick(saveButton)
+
+alt modo offline
+    EditActivity -> EditActivity: updateRecipe()
+    EditActivity -> Provider: update(uri, values)
+    Provider --> EditActivity: resultado actualización
+    alt actualización exitosa
+        EditActivity -> Fragment: setResult(OK, updated_data)
+        EditActivity -> User: Toast de éxito
+        EditActivity -> EditActivity: finish()
+        Fragment -> Fragment: updateRecipe(data)
+    else fallo al actualizar
+        EditActivity -> User: Toast de error
+    end
+else modo online
+EditActivity -> EditActivity: updateRecipeOnServer()
+    alt imagen modificada
+        EditActivity -> Base: uploadImageToServer()
+        Utils -> Server : POST imagen (multipart)
+        Server --> Utils : JSON con ruta en servidor
+        Utils --> Base : onSuccess(imagePathOnServer)
+        Base --> EditActivity : listener.onImageUploaded(imagePathOnServer)
+        EditActivity -> Server: subir imagen vía SFTP
+        Server --> EditActivity: devuelve ruta en servidor
+    else imagen no modificada
+        EditActivity -> EditActivity: usa ruta existente
+    end
+
+    EditActivity -> Worker: updateRecipeInServer(data)
+    Worker -> Server: HTTP POST update_recipe.php
+    Server --> Worker: JSON con éxito o error
+    Worker -> EditActivity: Resultado
+
+    alt éxito
+        EditActivity -> Fragment: setResult(OK, data_updated)
+        EditActivity -> User: Toast de éxito
+        EditActivity -> EditActivity: finish()
+        Fragment -> Fragment: updateRecipe(data)
+    else Error
+        EditActivity -> User: Toast de error
+    end
+end
+
+@enduml

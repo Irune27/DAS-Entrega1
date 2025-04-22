@@ -1,0 +1,48 @@
+@startuml
+class MenuActivity {
+- username: String
+- profileButton: Button
+- userImageView: ImageView
+- userText: TextView
+# onCreate(savedInstanceState: Bundle)
+# onResume()
+- createNotificationChannel()
+- scheduleDailyNotification()
+- loadUserData(userId: int)
+}
+
+class LoginActivity {
+- usernameEditText: EditText
+# onCreate(savedInstanceState: Bundle)
+}
+
+class RegisterActivity {
+- userEditText: EditText
+# onCreate(savedInstanceState: Bundle)
+}
+
+class SettingsActivity {
+# onCreate(savedInstanceState: Bundle)
+}
+
+MenuActivity ..> AppUtils
+MenuActivity ..> MainActivity
+MenuActivity ..> MapActivity
+MenuActivity ..> SettingsActivity
+MenuActivity ..> ProfileActivity
+MenuActivity ..> LoginActivity
+MenuActivity ..> NotificationReceiver
+MenuActivity ..> ConnectionWorker
+
+LoginActivity ..> AppUtils
+LoginActivity ..> ConnectionWorker
+LoginActivity ..> RegisterActivity
+LoginActivity ..> MenuActivity
+
+RegisterActivity ..> AppUtils
+RegisterActivity ..> ConnectionWorker
+RegisterActivity ..> LoginActivity
+
+SettingsActivity ..> MenuActivity
+SettingsActivity ..> AppUtils
+@enduml

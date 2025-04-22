@@ -1,0 +1,60 @@
+@startuml
+class MapActivity {
+- map: MapView
+- locationOverlay: MyLocationNewOverlay
+- defaultPoint: GeoPoint
+- restaurantMarkers: List<Marker>
+- cafeMarkers: List<Marker>
+- marketMarkers: List<Marker>
+- networkChangeReceiver: NetworkChangeReceiver
+- hasAlreadyLoadedPlaces: boolean
+- showRestaurants: boolean
+- showCafes: boolean
+- showMarkets: boolean
+- locationAttempts: int
+# onCreate(savedInstanceState: Bundle)
+# onResume()
+# onPause()
+- updateMarkers()
+- checkLocationPermission()
+- setupUserLocation()
+- getLastBestLocation(): Location
+- isOnline(): boolean
+- getBoundingBox(center: GeoPoint, rangeMeters: double): BoundingBox
+- loadNearbyPlaces(location: GeoPoint, type: String)
++ onRequestPermissionsResult(requestCode: int, permissions: String[], grantResults: int[])
++ loadPlacesFromPoint(p: GeoPoint)
++ clearAllPlaceMarkers()
+}
+
+class MyMapEventsReceiver {
+- context: Context
+- map: MapView
+- markerManager: MarkerManager
+- pressedPointMarker: Marker
++ <<Create>> MyMapEventsReceiver(context: Context, map: MapView, markerManager: MarkerManager)
++ singleTapConfirmedHelper(p: GeoPoint): boolean
++ longPressHelper(p: GeoPoint): boolean
+}
+
+interface MyMapEventsReceiver$MarkerManager {
+~ clearAllPlaceMarkers()
+~ loadPlacesFromPoint(point: GeoPoint)
+}
+
+class DialogMap {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+class DialogMapInfo {
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+MapActivity --> NetworkChangeReceiver
+MapActivity ..> AppUtils
+MapActivity --> MyMapEventsReceiver
+MapActivity ..> DialogMap
+MapActivity ..> DialogMapInfo
+
+MyMapEventsReceiver +.. MyMapEventsReceiver$MarkerManager
+@enduml

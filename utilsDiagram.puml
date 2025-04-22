@@ -1,0 +1,63 @@
+@startuml
+class AppUtils {
++ {static} loadRecipesFromLocal(context: Context, listener: OnRecipesLoadedListener)
++ {static} fetchRecipesFromServer(context: Context, lifecycleOwner: LifecycleOwner, userId: int, listener: OnRecipesLoadedListener)
++ {static} isMediaStorageAvailable(context: Context): boolean
++ {static} scaleBitmap(bitmap: Bitmap, maxWidth: int, maxHeight: int): Bitmap
++ {static} saveImageToExternalStorage(context: Context, bitmap: Bitmap, filenamePrefix: String): String
++ {static} checkImagePermission(activity: Activity, callback: PermissionCallback)
++ {static} checkCameraPermission(activity: Activity, callback: PermissionCallback)
++ {static} uploadImageToServer(imagePath: String, urlServer: String, textParams: Map<String,String>, fileFieldName: String, fileName: String, callback: UploadCallback)
++ {static} loadImage(context: Context, imagePath: String, imageView: ImageView)
++ {static} getMarkerColor(context: Context, type: String): Drawable
++ {static} setLocale(context: Context)
++ {static} setLocale(context: Context, languageCode: String)
+}
+
+interface AppUtils$OnRecipesLoadedListener {
+~ onRecipesLoaded(names: ArrayList<String>, images: ArrayList<String>)
+}
+
+interface AppUtils$PermissionCallback {
+~ onPermissionGranted()
+~ onPermissionDenied()
+~ showRationaleDialog()
+}
+
+interface AppUtils$UploadCallback {
+~ onSuccess(serverResponse: String)
+~ onError(e: Exception)
+}
+
+class MyService {
++ onCreate()
+- synchronizeRecipes()
+- {static} downloadImage(imageUrl: String): Bitmap
++ onBind(intent: Intent): IBinder
+}
+
+class ConnectionWorker {
++ <<Create>> ConnectionWorker(context: Context, params: WorkerParameters)
++ doWork(): Result
+}
+
+class NotificationReceiver {
++ onReceive(context: Context, intent: Intent)
+}
+
+class MyBroadcastReceiver {
++ onReceive(context: Context, intent: Intent)
+}
+
+AppUtils +.. AppUtils$OnRecipesLoadedListener
+AppUtils +.. AppUtils$PermissionCallback
+AppUtils +.. AppUtils$UploadCallback
+AppUtils ..> RecipeProvider
+AppUtils ..> ConnectionWorker
+
+MyService ..> ConnectionWorker
+MyService ..> RecipeProvider
+MyService ..> MyBroadcastReceiver
+
+NotificationReceiver ..> MenuActivity
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+class RecipeFragment {
+- recipeImageView: ImageView
+- recipeTextView: TextView
+- recipeName: String
+- recipeId: int
+- listener: recipeListener
+- editRecipeLauncher: ActivityResultLauncher<Intent>
++ <<Create>> RecipeFragment()
++ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View
++ onViewCreated(view: View, savedInstanceState: Bundle)
++ onAttach(context: Context)
++ updateRecipe(code: int, recipeName: String, recipeImage: String, ingredients: String, steps: String)
+}
+
+interface RecipeFragment$recipeListener {
+~ onRecipeSelected(pos: int)
+}
+
+RecipeFragment +.. RecipeFragment$recipeListener
+
+RecipeFragment ..> EditRecipeActivity
+RecipeFragment ..> DialogDelete
+
+RecipeFragment$recipeListener <|.. ShowRecipeActivity
+
+class ShowRecipeActivity {
+# onCreate(savedInstanceState: Bundle)
++ onConfigurationChanged(newConfig: Configuration)
++ onRecipeSelected(pos: int)
+}
+
+class EditRecipeActivity {
+- nameInput: EditText
+- recipeId: int
+# onCreate(savedInstanceState: Bundle)
+# onSaveInstanceState(outState: Bundle)
+# onRestoreInstanceState(savedInstanceState: Bundle)
+- updateRecipe()
+- updateRecipeOnServer()
+- updateRecipeInServer(name: String, serverImagePath: String, ingredients: String, steps: String)
+}
+
+EditRecipeActivity ..> RecipeProvider
+EditRecipeActivity ..> ConnectionWorker
+
+class DialogDelete {
+- recipeId: int
++ <<Create>> DialogDelete(recipeId: int)
++ onCreateDialog(savedInstanceState: Bundle): Dialog
+}
+
+DialogDelete ..> RecipeProvider
+DialogDelete ..> ConnectionWorker
+@enduml

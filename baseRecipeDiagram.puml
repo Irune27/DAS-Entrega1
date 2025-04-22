@@ -1,0 +1,54 @@
+@startuml
+class BaseRecipeActivity {
+# recipeImage: ImageView
+# imageUri: Uri
+# imagePath: String
+# imagePathOnServer: String
+# pickImageLauncher: ActivityResultLauncher<Intent>
+# takePictureLauncher: ActivityResultLauncher<Intent>
+# openImageChooser()
+# openCamera()
++ uploadImageToServer(image: String, listener: OnImageUploadListener)
++ onRequestPermissionsResult(requestCode: int, permissions: String[], grantResults: int[])
+}
+
+interface BaseRecipeActivity$OnImageUploadListener {
+~ onImageUploaded(imagePathOnServer: String)
+}
+
+BaseRecipeActivity +.. BaseRecipeActivity$OnImageUploadListener
+
+class AddRecipeActivity {
+- nameInput: EditText
+# onCreate(savedInstanceState: Bundle)
+# onSaveInstanceState(outState: Bundle)
+# onRestoreInstanceState(savedInstanceState: Bundle)
+- saveRecipe()
+- saveRecipeToServer(userId: int)
+}
+
+AddRecipeActivity ..> RecipeProvider
+
+class EditRecipeActivity {
+- nameInput: EditText
+- recipeId: int
+# onCreate(savedInstanceState: Bundle)
+# onSaveInstanceState(outState: Bundle)
+# onRestoreInstanceState(savedInstanceState: Bundle)
+- updateRecipe()
+- updateRecipeOnServer()
+- updateRecipeInServer(name: String, serverImagePath: String, ingredients: String, steps: String)
+}
+
+EditRecipeActivity ..> RecipeProvider
+EditRecipeActivity ..> ConnectionWorker
+
+BaseRecipeActivity <|-- AddRecipeActivity
+BaseRecipeActivity <|-- EditRecipeActivity
+
+BaseRecipeActivity ..> DialogCamera
+BaseRecipeActivity ..> DialogCameraInfo
+BaseRecipeActivity ..> DialogGallery
+BaseRecipeActivity ..> DialogGalleryInfo
+BaseRecipeActivity ..> AppUtils
+@enduml
